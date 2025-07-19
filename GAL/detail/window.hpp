@@ -47,8 +47,8 @@ namespace gal
 	{
 	public:
 		GAL_INLINE Window(int windowWidth, int windowHeight, const char* windowTitle, bool useCoreProfile = true,
-			bool resizable = false, bool vsync = false, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr):
-			width(width), height(height)
+			bool resizable = false, bool vsync = false, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr)
+			: width(width), height(height)
 		{
 			if (detail::openGLVersionMajor == -1 || detail::openGLVersionMinor == -1)
 				detail::throwErr(ErrCode::OpenGLVersionUnset, "OpenGL Version left unset when creating a window.");
@@ -137,13 +137,13 @@ namespace gal
 			glfwSwapBuffers(window);
 		}
 
-		/// @brief Set the main window's clear color. Subsequent calls to clearBackground, if not overriden, will now use this color.
+		/// @brief Set window's clear color. Subsequent calls to clearBackground, if not overriden, will now use this color.
 		GAL_INLINE void setClearColor(float r, float g, float b, float a)
 		{
 			glClearColor(r, g, b, a);
 		}
 
-		/// @brief Clear the background of the main window with the background color set by setClearColor(). Default is black.
+		/// @brief Clear the background of the window with the background color set by setClearColor(). Default is black.
 		GAL_INLINE void clearBackground()
 		{
 			glClear(GL_COLOR_BUFFER_BIT);
