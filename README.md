@@ -19,4 +19,4 @@ C++17 and OpenGL 4.5 or later required.
 ## Optional Macros:
 - GAL_SUPPRESS_LOGS: Suppresses all console logging GAL does when defined.
 - GAL_WARNINGS: Enables logging of warnings to console when non-fatal errors occur.
-- GAL_DISABLE_MIN_GLFW_VERSION: Disable check for minimum OpenGL version (4.5) when creating a window. It is NOT recommended to do this, and the behaviour of GAL when this macro is defined is undocumented, but this option is here as a last resort.
+- GAL_DISABLE_MIN_GL_VERSION: Disable check for minimum OpenGL version (4.5) when calling setOpenGLVersion(). It is NOT recommended to do this, and the behaviour of GAL when this macro is defined is undocumented, but this option is here as a last resort.
