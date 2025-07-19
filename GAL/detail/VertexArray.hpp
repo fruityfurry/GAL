@@ -5,12 +5,12 @@ namespace gal
 {
 	namespace detail
 	{
-		GAL_INLINE void deleteVertexArray(type::OBRVertexArrayID id)
+		GAL_INLINE void deleteVertexArray(type::GALVertexArrayID id)
 		{
 			glDeleteVertexArrays(1, &id);
 		}
 
-		GAL_INLINE ResourceTracker<type::OBRVertexArrayID, deleteVertexArray> vertexArrayTracker;
+		GAL_INLINE ResourceTracker<type::GALVertexArrayID, deleteVertexArray> vertexArrayTracker;
 	}
 
 	class VertexArray
@@ -23,19 +23,19 @@ namespace gal
 		}
 
 		// Forbid copying.
-		VertexArray(const VertexArray&) = delete;
-		VertexArray& operator=(const VertexArray&) = delete;
+		GAL_INLINE VertexArray(const VertexArray&) = delete;
+		GAL_INLINE VertexArray& operator=(const VertexArray&) = delete;
 
 		// Allow moving.
-		VertexArray(VertexArray&&) noexcept = default;
-		VertexArray& operator=(VertexArray&&) noexcept = default;
+		GAL_INLINE VertexArray(VertexArray&&) noexcept = default;
+		GAL_INLINE VertexArray& operator=(VertexArray&&) noexcept = default;
 
 		GAL_INLINE ~VertexArray()
 		{
 			detail::vertexArrayTracker.remove(vertexArrayID);
 		}
 
-		GAL_NODISCARD GAL_INLINE type::OBRVertexArrayID getID() const noexcept { return vertexArrayID; }
+		GAL_NODISCARD GAL_INLINE type::GALVertexArrayID getID() const noexcept { return vertexArrayID; }
 
 		/// @brief Get a pointer to the vertex buffer at the given binding index.
 		/// Returns nullptr if no vertex buffer has been bound.
@@ -179,7 +179,7 @@ namespace gal
 		}
 
 	private:
-		type::OBRVertexArrayID vertexArrayID;
+		type::GALVertexArrayID vertexArrayID;
 		std::vector<Buffer*> vertexBuffers{ detail::maxVertexAttribBindings, nullptr };
 		Buffer* elementBuffer = nullptr;
 		GLenum elementBufferIndexType = 0;

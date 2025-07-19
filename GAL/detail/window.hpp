@@ -3,135 +3,157 @@
 
 #include "attributes.hpp"
 #include "GALException.hpp"
-namespace gal::detail { void updateKeyStates(); }
+namespace gal::detail { void updateKeyStates(GLFWwindow*); }
 
 namespace gal
 {
 	namespace detail
 	{
-		inline GLFWwindow* mainWindow = nullptr;
+		GAL_INLINE void deleteWindow(GLFWwindow* window)
+		{
+			glfwDestroyWindow(window);
+		}
 
-		GAL_INLINE void defaultResizeCallback(GLFWwindow*, int width, int height)
+		GAL_INLINE ResourceTracker<GLFWwindow*, deleteWindow> windowTracker;
+
+		GAL_INLINE int openGLVersionMajor = -1;
+		GAL_INLINE int openGLVersionMinor = -1;
+
+		GAL_INLINE bool postGLInitialized = false;
+
+		GAL_INLINE void defaultResizeCallback(GLFWwindow* window, int width, int height)
 		{
 			glViewport(0, 0, width, height);
 		}
 	}
 
-	/// @brief Set GAL's main window to this window. All subsequent GAL function calls that need a window will operate on this window.
-	GAL_INLINE void setMainWindow(GLFWwindow* window)
+	/// @brief Set the version of OpenGL to be used from now on. Cannot be called more than once unless terminate() is called.
+	GAL_INLINE void setOpenGLVersion(int major, int minor)
 	{
-		detail::mainWindow = window;
-	}
+		if (detail::openGLVersionMajor != -1 || detail::openGLVersionMinor != -1)
+			detail::throwErr(ErrCode::SetOpenGLVersionTwice, "Attempted to set OpenGL version twice.");
 
-	/// @brief Get GAL's main window.
-	GAL_NODISCARD GAL_INLINE GLFWwindow* getMainWindow()
-	{
-		return detail::mainWindow;
-	}
-
-	/// @brief Create a simple window, make its context current, and set the internal main window of GAL to this new window.
-	/// You won't need to pass the window pointer to any of GAL's functions, but you should still keep it handy for calling glfw functions yourself.
-	/// Throws an error if a window has already been created. Call destroyMainWindow() to clear this and allow creation of another window.
-	/// Setting resizable to true gives the window a simple default resize callback. You'll probably want to change this.
-	GAL_INLINE GLFWwindow* createMainWindow(int glfwVersionMajor, int glfwVersionMinor, bool useCore, int windowWidth, int windowHeight,
-		const char* windowTitle, bool resizable, bool vsync, GLFWmonitor* monitor = nullptr)
-	{
-		if (detail::mainWindow != nullptr)
-			detail::throwErr(ErrCode::WindowDuplication, "Tried creating a window when mainWindow was already set.");
-
-#ifndef GAL_DISABLE_MIN_GLFW_VERSION
-		if (glfwVersionMajor < 4 || glfwVersionMinor < 5)
-			detail::throwErr(ErrCode::GLFWVersionTooOld, "Attempted to create a window with a version of GLFW that was too low (< 4.5). "
+#ifndef GAL_DISABLE_MIN_GL_VERSION
+		if (major < 4 || minor < 5)
+			detail::throwErr(ErrCode::GLVersionTooOld, "Attempted to create a window with a version of GLFW that was too low (< 4.5). "
 														 "Define GAL_DISABLE_MIN_GLFW_VERSION if you REALLY need to get around this.");
+
+		detail::openGLVersionMajor = major;
+		detail::openGLVersionMinor = minor;
 #endif
-
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, glfwVersionMajor);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, glfwVersionMinor);
-		glfwWindowHint(GLFW_RESIZABLE, resizable);
-
-		if (useCore)
-			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-		GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, windowTitle, monitor, nullptr);
-		if (!window)
-			detail::throwErr(ErrCode::CreateWindowFailed, "Failed to create window.");
-
-		glfwMakeContextCurrent(window);
-
-		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-			detail::throwErr(ErrCode::GLADInitFailed, "Failed to initialize GLAD.");
-
-		detail::initCommonGLParams();
-
-		glViewport(0, 0, windowWidth, windowHeight);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		if (resizable)
-			glfwSetFramebufferSizeCallback(window, detail::defaultResizeCallback);
-		if (vsync)
-			glfwSwapInterval(1);
-
-		setMainWindow(window);
-		return window;
 	}
 
-	/// @brief Destroy GAL's main window and make way for a new one to be created. 
-	GAL_INLINE void destroyMainWindow()
+	class Window
 	{
-		if (detail::mainWindow)
+	public:
+		GAL_INLINE Window(int windowWidth, int windowHeight, const char* windowTitle, bool useCoreProfile = true,
+			bool resizable = false, bool vsync = false, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr):
+			width(width), height(height)
 		{
-			glfwDestroyWindow(detail::mainWindow);
-			detail::mainWindow = nullptr;
+			if (detail::openGLVersionMajor == -1 || detail::openGLVersionMinor == -1)
+				detail::throwErr(ErrCode::OpenGLVersionUnset, "OpenGL Version left unset when creating a window.");
+
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, detail::openGLVersionMajor);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, detail::openGLVersionMinor);
+			glfwWindowHint(GLFW_RESIZABLE, resizable);
+
+			if (useCoreProfile)
+				glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+			window = glfwCreateWindow(windowWidth, windowHeight, windowTitle, monitor, share);
+			if (!window)
+				detail::throwErr(ErrCode::CreateWindowFailed, "Failed to create window.");
+
+			detail::windowTracker.add(window);
+
+			glfwMakeContextCurrent(window);
+
+			if (!detail::postGLInitialized)
+			{
+				if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+					detail::throwErr(ErrCode::GLADInitFailed, "Failed to initialize GLAD.");
+
+				detail::initCommonGLParams();
+
+				detail::postGLInitialized = true;
+			}
+
+			glViewport(0, 0, windowWidth, windowHeight);
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+			if (resizable)
+				glfwSetFramebufferSizeCallback(window, detail::defaultResizeCallback);
+			if (vsync)
+				glfwSwapInterval(1);
 		}
-	}
 
-	/// @brief Set the main window's clear color. Subsequent calls to clearBackground will now use this color.
-	GAL_INLINE void setClearColor(float r, float g, float b, float a)
-	{
-		glClearColor(r, g, b, a);
-	}
+		// Forbid copying.
+		GAL_INLINE Window(const Window&) = delete;
+		GAL_INLINE Window& operator=(const Window&) = delete;
 
-	/// @brief Clear the background of the main window with the background color set by setClearColor(). Default is black.
-	GAL_INLINE void clearBackground()
-	{
-		glClear(GL_COLOR_BUFFER_BIT);
-	}
+		// Allow moving.
+		GAL_INLINE Window(Window&&) noexcept = default;
+		GAL_INLINE Window& operator=(Window&&) noexcept = default;
 
-	/// @brief Wrapper around GLFW function of same name for homogeneity. 
-	GAL_INLINE bool windowShouldClose()
-	{
-		return glfwWindowShouldClose(detail::mainWindow);
-	}
+		GAL_INLINE ~Window()
+		{
+			detail::windowTracker.remove(window);
+		}
 
-	/// @brief Wrapper around GLFW function of same name for homogeneity. 
-	GAL_INLINE void setWindowShouldClose(bool val)
-	{
-		return glfwSetWindowShouldClose(detail::mainWindow, val);
-	}
+		GAL_NODISCARD GAL_INLINE int getWidth() const noexcept
+		{
+			return width;
+		}
 
-	/// @brief Wrapper around GLFW function of same name for homogeneity. 
-	GAL_INLINE void swapBuffers()
-	{
-		glfwSwapBuffers(detail::mainWindow);
-	}
+		GAL_NODISCARD GAL_INLINE int getHeight() const noexcept
+		{
+			return height;
+		}
 
-	/// @brief Poll for events for this window and update internal state.
-	/// Should be called at the top of the update loop for responsive controls. 
-	GAL_INLINE void pollEvents()
-	{
-		if (!detail::mainWindow)
-			detail::throwErr(ErrCode::NoMainWindow, "pollEvents() called with no main window set.");
+		GAL_INLINE void setSize(int width, int height) const
+		{
+			glfwSetWindowSize(window, width, height);
+		}
 
-		glfwPollEvents();
-		detail::updateKeyStates();
-	}
+		GAL_INLINE void pollEvents() const noexcept
+		{
+			glfwPollEvents();
+			detail::updateKeyStates(window);
+		}
 
-	/// @brief Set the polygon mode of the main window, which affects how polygons are drawn. 
-	GAL_INLINE void setPolygonMode(PolygonMode mode)
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, static_cast<GLenum>(mode));
-	}
+		GAL_NODISCARD GAL_INLINE bool shouldClose() const noexcept
+		{
+			return glfwWindowShouldClose(window);
+		}
+
+		GAL_INLINE void setShouldClose(bool val) const noexcept
+		{
+			return glfwSetWindowShouldClose(window, val);
+		}
+
+		GAL_INLINE void swapBuffers() const noexcept
+		{
+			glfwSwapBuffers(window);
+		}
+
+		/// @brief Set the main window's clear color. Subsequent calls to clearBackground, if not overriden, will now use this color.
+		GAL_INLINE void setClearColor(float r, float g, float b, float a)
+		{
+			glClearColor(r, g, b, a);
+		}
+
+		/// @brief Clear the background of the main window with the background color set by setClearColor(). Default is black.
+		GAL_INLINE void clearBackground()
+		{
+			glClear(GL_COLOR_BUFFER_BIT);
+		}
+
+	private:
+		GLFWwindow* window;
+		int width;
+		int height;
+	};
 }
 
 #endif

@@ -15,12 +15,12 @@ namespace gal
 {
 	namespace detail
 	{
-		GAL_INLINE void deleteShaderProgram(type::OBRShaderProgramID id)
+		GAL_INLINE void deleteShaderProgram(type::GALShaderProgramID id)
 		{
 			glDeleteProgram(id);
 		}
 
-		GAL_INLINE ResourceTracker<type::OBRShaderProgramID, deleteShaderProgram> shaderProgramTracker;
+		GAL_INLINE ResourceTracker<type::GALShaderProgramID, deleteShaderProgram> shaderProgramTracker;
 	}
 
 	/// @brief GAL shader program class. Access its program ID via its programID field.
@@ -37,12 +37,12 @@ namespace gal
 		}
 
 		// Forbid copying.
-		ShaderProgram(const ShaderProgram&) = delete;
-		ShaderProgram& operator=(const ShaderProgram&) = delete;
+		GAL_INLINE ShaderProgram(const ShaderProgram&) = delete;
+		GAL_INLINE ShaderProgram& operator=(const ShaderProgram&) = delete;
 
 		// Allow moving.
-		ShaderProgram(ShaderProgram&&) noexcept = default;
-		ShaderProgram& operator=(ShaderProgram&&) noexcept = default;
+		GAL_INLINE ShaderProgram(ShaderProgram&&) noexcept = default;
+		GAL_INLINE ShaderProgram& operator=(ShaderProgram&&) noexcept = default;
 
 		GAL_INLINE ~ShaderProgram()
 		{
@@ -70,7 +70,7 @@ namespace gal
 			if (linked)
 				detail::throwErr(ErrCode::AddShaderAfterLinking, "Attempted to add shader to program after the program had already been linked.");
 
-			type::OBRIDType shaderID = glCreateShader(static_cast<GLenum>(type));
+			type::GALIDType shaderID = glCreateShader(static_cast<GLenum>(type));
 			const char* sourceCStr = source.c_str();
 			glShaderSource(shaderID, 1, &sourceCStr, nullptr);
 			glCompileShader(shaderID);
@@ -91,7 +91,7 @@ namespace gal
 			return *this;
 		}
 
-		GAL_NODISCARD GAL_INLINE type::OBRShaderProgramID getID() const noexcept
+		GAL_NODISCARD GAL_INLINE type::GALShaderProgramID getID() const noexcept
 		{
 			return programID;
 		}
@@ -238,14 +238,14 @@ namespace gal
 		// TODO: Vector uniform setters.
 
 	private:
-		type::OBRShaderProgramID programID;
+		type::GALShaderProgramID programID;
 		bool linked = false;
-		std::vector<type::OBRIDType> shaderIDs; // List of shader IDs that haven't been deleted yet.
+		std::vector<type::GALIDType> shaderIDs; // List of shader IDs that haven't been deleted yet.
 		mutable std::unordered_map<std::string, int> uniformLocationss; // Cached locations of uniforms.
 
 		GAL_INLINE void deleteAllShaders()
 		{
-			for (type::OBRIDType id : shaderIDs)
+			for (type::GALIDType id : shaderIDs)
 			{
 				glDetachShader(programID, id);
 				glDeleteShader(id);

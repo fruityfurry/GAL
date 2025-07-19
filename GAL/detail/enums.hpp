@@ -11,10 +11,10 @@ namespace gal
 		GLADInitFailed, // Failed to initialize GLAD.
 
 		// Window.
-		GLFWVersionTooOld, // Attempted to create a window with a version of GLFW that was too low (< 4.5).
-		CreateWindowFailed, // Failed to creatae window.
-		WindowDuplication, // Attempted to create a window without deleting the first one.
-		NoMainWindow, // Called a function that needed a main window to work with no main window active.
+		GLVersionTooOld, // Attempted to create a window with a version of GLFW that was too low (< 4.5).
+		CreateWindowFailed, // Failed to create a window.
+		SetOpenGLVersionTwice, // Attempted to set OpenGL version twice.
+		OpenGLVersionUnset, // OpenGL Version left unset when creating a window.
 
 		// Shader.
 		ShaderReadFailed, // Failed to read shader file.
@@ -43,9 +43,10 @@ namespace gal
 			case ErrCode::GLFWInitFailed: return "GLFWInitFailed";
 			case ErrCode::GLADInitFailed: return "GLADInitFailed";
 
+			case ErrCode::GLVersionTooOld: return "GLVersionTooOld";
 			case ErrCode::CreateWindowFailed: return "CreateWindowFailed";
-			case ErrCode::WindowDuplication: return "WindowDuplication";
-			case ErrCode::NoMainWindow: return "NoMainWindow";
+			case ErrCode::SetOpenGLVersionTwice: return "SetOpenGLVersionTwice";
+			case ErrCode::OpenGLVersionUnset: return "OpenGLVersionUnset";
 
 			case ErrCode::ShaderReadFailed: return "ShaderReadFailed";
 			case ErrCode::ShaderCompFailed: return "ShaderCompFailed";

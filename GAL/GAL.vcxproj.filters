@@ -62,7 +62,7 @@
     <ClInclude Include="detail\VertexArray.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="detail\window.hpp">
+    <ClInclude Include="detail\Window.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

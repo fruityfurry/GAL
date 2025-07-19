@@ -18,11 +18,15 @@ namespace gal
 		}
 	}
 
-	/// @brief Terminate GAL and clean up everything it had allocated.
+	/// @brief Terminate GAL, clean up everything it had allocated, and reset all internal state to their defaults.
 	GAL_INLINE void terminate()
 	{
-		destroyMainWindow();
+		detail::openGLVersionMajor = -1;
+		detail::openGLVersionMinor = -1;
 
+		detail::postGLInitialized = false;
+
+		detail::windowTracker.clear();
 		detail::shaderProgramTracker.clear();
 		detail::bufferTracker.clear();
 		detail::vertexArrayTracker.clear();

@@ -15,12 +15,12 @@ namespace gal
 {
 	namespace detail
 	{
-		GAL_INLINE void deleteBuffer(type::OBRBufferID id)
+		GAL_INLINE void deleteBuffer(type::GALBufferID id)
 		{
 			glDeleteBuffers(1, &id);
 		}
 
-		GAL_INLINE ResourceTracker<type::OBRBufferID, deleteBuffer> bufferTracker;
+		GAL_INLINE ResourceTracker<type::GALBufferID, deleteBuffer> bufferTracker;
 	}
 
 	class Buffer
@@ -34,19 +34,19 @@ namespace gal
 		}
 
 		// Forbid copying.
-		Buffer(const Buffer&) = delete;
-		Buffer& operator=(const Buffer&) = delete;
+		GAL_INLINE Buffer(const Buffer&) = delete;
+		GAL_INLINE Buffer& operator=(const Buffer&) = delete;
 
 		// Allow moving.
-		Buffer(Buffer&&) noexcept = default;
-		Buffer& operator=(Buffer&&) noexcept = default;
+		GAL_INLINE Buffer(Buffer&&) noexcept = default;
+		GAL_INLINE Buffer& operator=(Buffer&&) noexcept = default;
 
 		GAL_INLINE ~Buffer()
 		{
 			detail::bufferTracker.remove(bufferID);
 		}
 
-		GAL_NODISCARD GAL_INLINE type::OBRBufferID getID() const noexcept { return bufferID; }
+		GAL_NODISCARD GAL_INLINE type::GALBufferID getID() const noexcept { return bufferID; }
 
 		GAL_NODISCARD GAL_INLINE BufferType getBufferType() const noexcept { return static_cast<BufferType>(type); }
 
@@ -159,7 +159,7 @@ namespace gal
 		}
 
 	private:
-		type::OBRBufferID bufferID;
+		type::GALBufferID bufferID;
 		GLenum type;
 		GLsizeiptr size = type::OBRSizeNull;
 		BufferUsageHint usageHint = BufferUsageHint::Null;

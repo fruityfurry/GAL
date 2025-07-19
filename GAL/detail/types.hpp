@@ -9,18 +9,18 @@ namespace gal
 	namespace type
 	{
 		// Simple typedefs.
-		using OBRBool = uint8_t;
+		using GALBool = uint8_t;
 
 		// Type used for shader, buffer, etc. IDs.
-		using OBRIDType = GLuint;
+		using GALIDType = GLuint;
 
 		// ID Types for semantic clarity.
-		using OBRShaderProgramID = OBRIDType;
-		using OBRBufferID = OBRIDType;
-		using OBRVertexArrayID = OBRIDType;
+		using GALShaderProgramID = GALIDType;
+		using GALBufferID = GALIDType;
+		using GALVertexArrayID = GALIDType;
 
 		GAL_STATIC GAL_CONSTEXPR GLsizeiptr OBRSizeNull = static_cast<GLsizeiptr>(-1);
-		GAL_STATIC GAL_CONSTEXPR OBRIDType OBRIDNull = static_cast<OBRIDType>(-1);
+		GAL_STATIC GAL_CONSTEXPR GALIDType OBRIDNull = static_cast<GALIDType>(-1);
 	}
 }
 

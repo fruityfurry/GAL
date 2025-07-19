@@ -14,17 +14,17 @@ namespace gal
 	{
 		GAL_CONSTEXPR uint16_t maxKeys = GLFW_KEY_LAST + 1;
 
-		GAL_INLINE std::array<type::OBRBool, maxKeys> prevKeyStates = {};
-		GAL_INLINE std::array<type::OBRBool, maxKeys> currKeyStates = {};
+		GAL_INLINE std::array<type::GALBool, maxKeys> prevKeyStates = {};
+		GAL_INLINE std::array<type::GALBool, maxKeys> currKeyStates = {};
 
 		/// @brief Update the key states for this window. Required for keyboard-related functions like isKeyDown to work. 
-		GAL_INLINE void updateKeyStates()
+		GAL_INLINE void updateKeyStates(GLFWwindow* window)
 		{
 			std::copy(currKeyStates.begin(), currKeyStates.end(), prevKeyStates.begin());
 
 			for (int key = 0; key < maxKeys; ++key)
 			{
-				currKeyStates[key] = glfwGetKey(detail::mainWindow, key) == GLFW_PRESS;
+				currKeyStates[key] = glfwGetKey(window, key) == GLFW_PRESS;
 			}
 		}
 
@@ -36,7 +36,7 @@ namespace gal
 	}
 
 	/// @brief Returns true once when a key is first pressed.
-	/// Remember to call obr::pollEvents() to keep the internal key states updated.
+	/// Remember to call pollEvents() to keep the internal key states updated.
 	GAL_NODISCARD GAL_INLINE bool isKeyPressed(int key)
 	{
 		if (!detail::isValidKey(key))
@@ -46,7 +46,7 @@ namespace gal
 	}
 
 	/// @brief Returns true once when a key is first released.
-	/// Remember to call obr::pollEvents() to keep the internal key states updated.
+	/// Remember to call pollEvents() to keep the internal key states updated.
 	GAL_NODISCARD GAL_INLINE bool isKeyReleased(int key)
 	{
 		if (!detail::isValidKey(key))
@@ -56,7 +56,7 @@ namespace gal
 	}
 
 	/// @brief Returns true if the key is currently held down.
-	/// Remember to call obr::pollEvents() to keep the internal key states updated.
+	/// Remember to call pollEvents() to keep the internal key states updated.
 	GAL_NODISCARD GAL_INLINE bool isKeyDown(int key)
 	{
 		if (!detail::isValidKey(key))
@@ -66,7 +66,7 @@ namespace gal
 	}
 
 	/// @brief Returns true if the key is not currently held.
-	/// Remember to call obr::pollEvents() to keep the internal key states updated.
+	/// Remember to call pollEvents() to keep the internal key states updated.
 	GAL_NODISCARD GAL_INLINE bool isKeyUp(int key)
 	{
 		if (!detail::isValidKey(key))

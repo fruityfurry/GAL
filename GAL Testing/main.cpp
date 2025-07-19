@@ -1,12 +1,12 @@
-#define OBR_WARNINGS
+#define GAL_WARNINGS
 #include <gal.hpp>
 #include <iostream>
 
-static void processInput()
+static void processInput(const gal::Window& window)
 {
 	// Can use regular glfw callback too.
 	if (gal::isKeyPressed(GLFW_KEY_ESCAPE))
-		gal::setWindowShouldClose(true);
+		window.setShouldClose(true);
 
 	if (gal::isKeyPressed(GLFW_KEY_0))
 		std::cout << "Hey, you just pressed zero!\n";
@@ -16,9 +16,10 @@ int main()
 {
 	// Initialize everything GAL needs before calling any other GAL function.
 	gal::init();
+	gal::setOpenGLVersion(4, 5);  // OpenGL version must be set before creating a window.
 
-	GLFWwindow* window = gal::createMainWindow(4, 5, true, 800, 600, "Hello! I'm using GAL!", false, true);
-	gal::setClearColor(0.1f, 0.2f, 0.2f, 1.0f);
+	gal::Window window = gal::Window(800, 600, "Hello! I'm using GAL!");
+	window.setClearColor(0.1f, 0.2f, 0.2f, 1.0f);
 
 	gal::ShaderProgram shader = gal::ShaderProgram();
 	shader.addShaderFromFile("vert.vert", gal::ShaderType::Vertex)
@@ -56,16 +57,16 @@ int main()
 	vao.bind();
 	shader.use();
 
-	while (!gal::windowShouldClose())
+	while (!window.shouldClose())
 	{
-		gal::pollEvents();
-		processInput();
+		window.pollEvents();
+		processInput(window);
 
-		gal::clearBackground();
+		window.clearBackground();
 
 		vao.drawElementsUnbound(GL_TRIANGLES, 0, 6);
 
-		gal::swapBuffers();
+		window.swapBuffers();
 	}
 
 	gal::terminate();

@@ -35,7 +35,7 @@
     <ClInclude Include="detail\types.hpp" />
     <ClInclude Include="detail\vertex.hpp" />
     <ClInclude Include="detail\VertexArray.hpp" />
-    <ClInclude Include="detail\window.hpp" />
+    <ClInclude Include="detail\Window.hpp" />
     <ClInclude Include="gal.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -14,6 +14,6 @@
 #include "detail/ShaderProgram.hpp"
 #include "detail/vertex.hpp"
 #include "detail/VertexArray.hpp"
-#include "detail/window.hpp"
+#include "detail/Window.hpp"
 
 #endif
