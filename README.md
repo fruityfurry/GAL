@@ -17,6 +17,8 @@ C++17 and OpenGL 4.5 or later required.
 ###### I've never made a proper header only library I have no idea how you're meant to elegantly handle external dependencies
 
 ## Optional Macros:
-- GAL_SUPPRESS_LOGS: Suppresses all console logging GAL does when defined.
-- GAL_WARNINGS: Enables logging of warnings to console when non-fatal errors occur.
+- GAL_NO_GLAD_INCLUDE: Don't include GLAD in gal.hpp. This means it's now your responsibility to include it before you include gal.hpp.
+- GAL_NO_GLFW_INCLUDE: Don't include GLFW in gal.hpp. This means it's now your responsibility to include it before you include gal.hpp.
+- GAL_SUPPRESS_LOGS: Suppresses all console logging GAL does.
+- GAL_WARNINGS: Enables logging of warnings to console when non-fatal errors occur (Not that any have been added yet, I might get rid of this macro).
 - GAL_DISABLE_MIN_GL_VERSION: Disable check for minimum OpenGL version (4.5) when calling setOpenGLVersion(). It is NOT recommended to do this, and the behaviour of GAL when this macro is defined is undocumented, but this option is here as a last resort.
