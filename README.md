@@ -11,9 +11,11 @@ Due to the deliberate design of GAL to just be a thin abstraction layer and litt
 Copy all the files wherever you like to keep your libraries and include gal.hpp at the top of your file. \
 C++17 and OpenGL 4.5 or later required.
 ## Dependencies:
-- GLFW3
-- GLM
 - GLAD
+- GLFW3
+#### Probably going to be dependencies later if I get around to the features that use them:
+- GLM
+- stb_image
 ###### I've never made a proper header only library I have no idea how you're meant to elegantly handle external dependencies
 
 ## Optional Macros:
