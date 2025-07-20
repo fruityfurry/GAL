@@ -16,6 +16,7 @@ C++17 and OpenGL 4.5 or later required.
 #### Probably going to be dependencies later if I get around to the features that use them:
 - GLM
 - stb_image
+- Maybe ImGui
 ###### I've never made a proper header only library I have no idea how you're meant to elegantly handle external dependencies
 
 ## Optional Macros:
