@@ -3,7 +3,11 @@
 
 #include "attributes.hpp"
 #include "GALException.hpp"
-namespace gal::detail { void updateKeyStates(GLFWwindow*); }
+namespace gal::detail
+{
+	void updateKeyStates(GLFWwindow*);
+	void postGLInit();
+}
 
 namespace gal
 {
@@ -48,7 +52,7 @@ namespace gal
 	public:
 		GAL_INLINE Window(int windowWidth, int windowHeight, const char* windowTitle, bool useCoreProfile = true,
 			bool resizable = false, bool vsync = false, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr)
-			: width(width), height(height)
+			: width(windowWidth), height(windowHeight)
 		{
 			if (detail::openGLVersionMajor == -1 || detail::openGLVersionMinor == -1)
 				detail::throwErr(ErrCode::OpenGLVersionUnset, "OpenGL Version left unset when creating a window.");
@@ -69,14 +73,7 @@ namespace gal
 			glfwMakeContextCurrent(window);
 
 			if (!detail::postGLInitialized)
-			{
-				if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-					detail::throwErr(ErrCode::GLADInitFailed, "Failed to initialize GLAD.");
-
-				detail::initCommonGLParams();
-
-				detail::postGLInitialized = true;
-			}
+				detail::postGLInit();
 
 			glViewport(0, 0, windowWidth, windowHeight);
 			glEnable(GL_BLEND);
@@ -101,53 +98,36 @@ namespace gal
 			detail::windowTracker.remove(window);
 		}
 
-		GAL_NODISCARD GAL_INLINE int getWidth() const noexcept
-		{
-			return width;
-		}
+		GAL_NODISCARD GAL_INLINE GLFWwindow* getGLFWWindow() const noexcept { return window; }
 
-		GAL_NODISCARD GAL_INLINE int getHeight() const noexcept
-		{
-			return height;
-		}
+		GAL_NODISCARD GAL_INLINE int getWidth() const noexcept { return width; }
+		GAL_NODISCARD GAL_INLINE int getHeight() const noexcept { return height; }
 
-		GAL_INLINE void setSize(int width, int height) const
+		GAL_INLINE void setSize(int width, int height)
 		{
 			glfwSetWindowSize(window, width, height);
+			this->width = width;
+			this->height = height;
 		}
 
+		/// @brief Poll for window events and keep internal keystates updated.
+		/// This should be called at the beginning of your update loop. 
 		GAL_INLINE void pollEvents() const noexcept
 		{
 			glfwPollEvents();
 			detail::updateKeyStates(window);
 		}
 
-		GAL_NODISCARD GAL_INLINE bool shouldClose() const noexcept
-		{
-			return glfwWindowShouldClose(window);
-		}
+		GAL_NODISCARD GAL_INLINE bool shouldClose() const noexcept { return glfwWindowShouldClose(window); }
+		GAL_INLINE void setShouldClose(bool val) const noexcept { return glfwSetWindowShouldClose(window, val); }
 
-		GAL_INLINE void setShouldClose(bool val) const noexcept
-		{
-			return glfwSetWindowShouldClose(window, val);
-		}
-
-		GAL_INLINE void swapBuffers() const noexcept
-		{
-			glfwSwapBuffers(window);
-		}
+		GAL_INLINE void swapBuffers() const noexcept { glfwSwapBuffers(window); }
 
 		/// @brief Set window's clear color. Subsequent calls to clearBackground, if not overriden, will now use this color.
-		GAL_INLINE void setClearColor(float r, float g, float b, float a)
-		{
-			glClearColor(r, g, b, a);
-		}
+		GAL_INLINE void setClearColor(float r, float g, float b, float a) noexcept { glClearColor(r, g, b, a); }
 
 		/// @brief Clear the background of the window with the background color set by setClearColor(). Default is black.
-		GAL_INLINE void clearBackground()
-		{
-			glClear(GL_COLOR_BUFFER_BIT);
-		}
+		GAL_INLINE void clearBackground() noexcept { glClear(GL_COLOR_BUFFER_BIT); }
 
 	private:
 		GLFWwindow* window;

@@ -26,4 +26,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\pone.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\container.jpeg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\tar child.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

@@ -102,7 +102,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\kasss\Documents\My Code\C++\GL Abstraction Layer\GAL;C:\Users\kasss\Documents\My Code\C++\__Libs__\KHR;C:\Users\kasss\Documents\My Code\C++\__Libs__\ImGui;C:\Users\kasss\Documents\My Code\C++\__Libs__\glm;C:\Users\kasss\Documents\My Code\C++\__Libs__\GLFW;C:\Users\kasss\Documents\My Code\C++\__Libs__\glad;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\kasss\Documents\My Code\C++\__Libs__\stb\stb_image;C:\Users\kasss\Documents\My Code\C++\GL Abstraction Layer\GAL;C:\Users\kasss\Documents\My Code\C++\__Libs__\KHR;C:\Users\kasss\Documents\My Code\C++\__Libs__\ImGui;C:\Users\kasss\Documents\My Code\C++\__Libs__\glm;C:\Users\kasss\Documents\My Code\C++\__Libs__\GLFW;C:\Users\kasss\Documents\My Code\C++\__Libs__\glad;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -133,6 +133,11 @@
   <ItemGroup>
     <ClCompile Include="..\..\__Libs__\glad\glad.c" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\container.jpeg" />
+    <Image Include="resources\pone.png" />
+    <Image Include="resources\tar child.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

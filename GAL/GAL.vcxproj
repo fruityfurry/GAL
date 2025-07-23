@@ -32,6 +32,7 @@
     <ClInclude Include="detail\GALException.hpp" />
     <ClInclude Include="detail\ResourceTracker.hpp" />
     <ClInclude Include="detail\ShaderProgram.hpp" />
+    <ClInclude Include="detail\Texture.hpp" />
     <ClInclude Include="detail\types.hpp" />
     <ClInclude Include="detail\vertex.hpp" />
     <ClInclude Include="detail\VertexArray.hpp" />
@@ -123,7 +124,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\kasss\Documents\My Code\C++\__Libs__\KHR;C:\Users\kasss\Documents\My Code\C++\__Libs__\ImGui;C:\Users\kasss\Documents\My Code\C++\__Libs__\glm;C:\Users\kasss\Documents\My Code\C++\__Libs__\GLFW;C:\Users\kasss\Documents\My Code\C++\__Libs__\glad;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\kasss\Documents\My Code\C++\__Libs__\stb\stb_image;C:\Users\kasss\Documents\My Code\C++\__Libs__\KHR;C:\Users\kasss\Documents\My Code\C++\__Libs__\ImGui;C:\Users\kasss\Documents\My Code\C++\__Libs__\glm;C:\Users\kasss\Documents\My Code\C++\__Libs__\GLFW;C:\Users\kasss\Documents\My Code\C++\__Libs__\glad;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

@@ -1,8 +1,12 @@
 #ifndef GAL_GAL_HPP
 #define GAL_GAL_HPP
 
+#ifndef GAL_NO_GLAD_INCLUDE
 #include <glad.h>
+#endif
+#ifndef GAL_NO_GLFW_INCLUDE
 #include <glfw3.h>
+#endif
 
 #include "detail/Buffer.hpp"
 #include "detail/enums.hpp"
@@ -12,6 +16,7 @@
 #include "detail/keyboard.hpp"
 #include "detail/ResourceTracker.hpp"
 #include "detail/ShaderProgram.hpp"
+#include "detail/Texture.hpp"
 #include "detail/vertex.hpp"
 #include "detail/VertexArray.hpp"
 #include "detail/Window.hpp"

@@ -49,10 +49,9 @@ namespace gal
 		GAL_NODISCARD GAL_INLINE type::GALBufferID getID() const noexcept { return bufferID; }
 
 		GAL_NODISCARD GAL_INLINE BufferType getBufferType() const noexcept { return static_cast<BufferType>(type); }
-
 		GAL_NODISCARD GAL_INLINE GLenum getGLenumBufferType() const noexcept { return type; }
 
-		/// @brief Get the current size of this buffer. Returns OBRSizeNull if the buffer has not been allocated yet. 
+		/// @brief Get the current size of this buffer. Returns NullSize if the buffer has not been allocated yet. 
 		GAL_NODISCARD GAL_INLINE GLsizeiptr getSize() const noexcept { return size; }
 
 		/// @brief Get the usage hint applied to this buffer. Returns BufferUsageHint::Null if the buffer has not been allocated yet. 
@@ -161,7 +160,7 @@ namespace gal
 	private:
 		type::GALBufferID bufferID;
 		GLenum type;
-		GLsizeiptr size = type::OBRSizeNull;
+		GLsizeiptr size = type::NullSize;
 		BufferUsageHint usageHint = BufferUsageHint::Null;
 
 		bool allocated = false;

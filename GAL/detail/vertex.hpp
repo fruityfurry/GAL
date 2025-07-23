@@ -90,6 +90,94 @@ namespace gal
 	};
 
 	/// @brief Simple built-in vertex struct.
+	/// 2-component position.
+	/// 3-component color.
+	/// 2-component texture coordinates.
+	struct VertexP2C3T2
+	{
+		float position[2];
+		float color[3];
+		float texCoords[2];
+	};
+
+	/// @brief Simple built-in vertex struct.
+	/// 2-component position.
+	/// 3-component color.
+	/// 3-component texture coordinates.
+	struct VertexP2C3T3
+	{
+		float position[2];
+		float color[3];
+		float texCoords[3];
+	};
+
+	/// @brief Simple built-in vertex struct.
+	/// 2-component position.
+	/// 4-component color.
+	/// 2-component texture coordinates.
+	struct VertexP2C4T2
+	{
+		float position[2];
+		float color[4];
+		float texCoords[2];
+	};
+
+	/// @brief Simple built-in vertex struct.
+	/// 2-component position.
+	/// 4-component color.
+	/// 3-component texture coordinates.
+	struct VertexP2C4T3
+	{
+		float position[2];
+		float color[4];
+		float texCoords[3];
+	};
+
+	/// @brief Simple built-in vertex struct.
+	/// 3-component position.
+	/// 3-component color.
+	/// 2-component texture coordinates.
+	struct VertexP3C3T2
+	{
+		float position[3];
+		float color[3];
+		float texCoords[2];
+	};
+
+	/// @brief Simple built-in vertex struct.
+	/// 3-component position.
+	/// 3-component color.
+	/// 3-component texture coordinates.
+	struct VertexP3C3T3
+	{
+		float position[3];
+		float color[3];
+		float texCoords[3];
+	};
+
+	/// @brief Simple built-in vertex struct.
+	/// 3-component position.
+	/// 4-component color.
+	/// 2-component texture coordinates.
+	struct VertexP3C4T2
+	{
+		float position[3];
+		float color[4];
+		float texCoords[2];
+	};
+
+	/// @brief Simple built-in vertex struct.
+	/// 3-component position.
+	/// 4-component color.
+	/// 3-component texture coordinates.
+	struct VertexP3C4T3
+	{
+		float position[3];
+		float color[4];
+		float texCoords[3];
+	};
+
+	/// @brief Simple built-in vertex struct.
 	/// 3-component position.
 	/// 3-component normal.
 	struct VertexP3N3

@@ -18,9 +18,9 @@ namespace gal
 		using GALShaderProgramID = GALIDType;
 		using GALBufferID = GALIDType;
 		using GALVertexArrayID = GALIDType;
+		using GALTextureID = GALIDType;
 
-		GAL_STATIC GAL_CONSTEXPR GLsizeiptr OBRSizeNull = static_cast<GLsizeiptr>(-1);
-		GAL_STATIC GAL_CONSTEXPR GALIDType OBRIDNull = static_cast<GALIDType>(-1);
+		GAL_STATIC GAL_CONSTEXPR GLsizeiptr NullSize = static_cast<GLsizeiptr>(-1);
 	}
 }
 

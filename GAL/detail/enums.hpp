@@ -35,8 +35,8 @@ namespace gal
 		GotNullBuffer, // Attempted to get a null buffer.
 	};
 
-    /// @brief Convert an GAL enum to a string.
-    GAL_NODISCARD GAL_INLINE const char* enumToString(ErrCode errCode)
+    /// @brief Convert a GAL error code to a string.
+    GAL_NODISCARD GAL_INLINE const char* errCodeToString(ErrCode errCode)
     {
 		switch (errCode)
 		{
@@ -79,21 +79,6 @@ namespace gal
 		Fragment = GL_FRAGMENT_SHADER
 	};
 
-	GAL_NODISCARD GAL_INLINE const char* enumToString(ShaderType type)
-	{
-		switch (type)
-		{
-			case ShaderType::Compute: return "Compute";
-			case ShaderType::Vertex: return "Vertex";
-			case ShaderType::TessControl: return "TessControl";
-			case ShaderType::TessEvaluation: return "TessEvaluation";
-			case ShaderType::Geometry: return "Geometry";
-			case ShaderType::Fragment: return "Fragment";
-
-			default: return "Unknown";
-		}
-	}
-
 	/// @brief Enum of all possible polygon modes.
 	/// Values align with GLenums of same names.
 	enum class PolygonMode : GLenum
@@ -102,18 +87,6 @@ namespace gal
 		Line = GL_LINE, // Draw only polygon edges as lines. See GL_LINE_WIDTH for further configuration.
 		Fill = GL_FILL // Draw the whole polygon.
 	};
-
-	GAL_NODISCARD GAL_INLINE const char* enumToString(PolygonMode mode)
-	{
-		switch (mode)
-		{
-			case PolygonMode::Point: return "Point";
-			case PolygonMode::Line: return "Line";
-			case PolygonMode::Fill: return "Fill";
-
-			default: return "Unknown";
-		}
-	}
 
 	/// @brief Enum of all possible buffer types.
 	/// Values align with GLenums of same names.
@@ -135,29 +108,6 @@ namespace gal
 		Uniform           = GL_UNIFORM_BUFFER
 	};
 
-	GAL_NODISCARD GAL_INLINE const char* enumToString(BufferType type)
-	{
-		switch (type)
-		{
-			case BufferType::Array: return "Array";
-			case BufferType::AtomicCounter: return "AtomicCounter";
-			case BufferType::CopyRead: return "CopyRead";
-			case BufferType::CopyWrite: return "CopyWrite";
-			case BufferType::DispatchIndirect: return "DispatchIndirect";
-			case BufferType::DrawIndirect: return "DrawIndirect";
-			case BufferType::ElementArray: return "ElementArray";
-			case BufferType::PixelPack: return "PixelPack";
-			case BufferType::PixelUnpack: return "PixelUnpack";
-			case BufferType::Query: return "Query";
-			case BufferType::ShaderStorage: return "ShaderStorage";
-			case BufferType::Texture: return "Texture";
-			case BufferType::TransformFeedback: return "TransformFeedback";
-			case BufferType::Uniform: return "Uniform";
-
-			default: return "Unknown";
-		}
-	}
-
 	/// @brief Enum of all possible buffer usage hints.
 	/// Values align with GLenums of same names.
 	enum class BufferUsageHint : GLenum
@@ -177,25 +127,22 @@ namespace gal
 		StreamCopy = GL_STREAM_COPY
 	};
 
-	GAL_NODISCARD GAL_INLINE const char* enumToString(BufferUsageHint hint)
+	/// @brief Enum of all possible texture types.
+	/// Values align with GLenums of same names.
+	enum class TextureType
 	{
-		switch (hint)
-		{
-			case BufferUsageHint::StaticDraw: return "StaticDraw";
-			case BufferUsageHint::StaticRead: return "StaticRead";
-			case BufferUsageHint::StaticCopy: return "StaticCopy";
-
-			case BufferUsageHint::DynamicDraw: return "DynamicDraw";
-			case BufferUsageHint::DynamicRead: return "DynamicRead";
-			case BufferUsageHint::DynamicCopy: return "DynamicCopy";
-
-			case BufferUsageHint::StreamDraw: return "StreamDraw";
-			case BufferUsageHint::StreamRead: return "StreamRead";
-			case BufferUsageHint::StreamCopy: return "StreamCopy";
-
-			default: return "Unknown";
-		}
-	}
+		OneD                 = GL_TEXTURE_1D,
+		TwoD                 = GL_TEXTURE_2D,
+		ThreeD               = GL_TEXTURE_3D,
+		Rectangle            = GL_TEXTURE_RECTANGLE,
+		Buffer               = GL_TEXTURE_BUFFER,
+		CubeMap              = GL_TEXTURE_CUBE_MAP,
+		OneDArray            = GL_TEXTURE_1D_ARRAY,
+		TwoDArray            = GL_TEXTURE_2D_ARRAY,
+		CubeMapArray         = GL_TEXTURE_CUBE_MAP_ARRAY,
+		TwoDMultisample      = GL_TEXTURE_2D_MULTISAMPLE,
+		TwoDMultisampleArray = GL_TEXTURE_2D_MULTISAMPLE_ARRAY,
+	};
 }
 
 #endif
