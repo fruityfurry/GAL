@@ -1,4 +1,4 @@
-# GL Abstraction Layer (GAL) V0.1
+# GL Abstraction Layer (GAL) V0.2
 
 A personal project to learn about every nook and cranny of OpenGL, and eventually facilitate easier OpenGL programming for myself in the future.
 This is currently under development and not even remotely a finished product.
