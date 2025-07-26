@@ -149,31 +149,27 @@ namespace gal
 		// TODO: Instanced draw and such.
 
 		/// @brief Binds this VAO and draws it.
-		/// You should use drawUnbound() if you have already bound the VAO yourself. 
-		GAL_INLINE void draw(GLenum mode, GLint first, GLsizei count) const noexcept
+		GAL_INLINE void drawAB(GLenum mode, GLint first, GLsizei count) const noexcept
 		{
 			bind();
 			glDrawArrays(mode, first, count);
 		}
 
-		/// @brief Call this only if the correct VAO is already bound.
-		/// See draw() for the version that binds this VAO automatically.
-		GAL_INLINE void drawUnbound(GLenum mode, GLint first, GLsizei count) const noexcept
+		/// @brief Draws this VAO.
+		GAL_INLINE void drawNB(GLenum mode, GLint first, GLsizei count) const noexcept
 		{
 			glDrawArrays(mode, first, count);
 		}
 
-		/// @brief Binds this VAO and draws it using its EBO. 
-		/// You should use drawElementsUnbound() if you have already bound the VAO yourself.
-		GAL_INLINE void drawElements(GLenum mode, GLintptr offset, GLsizei count) const noexcept
+		/// @brief Binds this VAO and draws it using its EBO.
+		GAL_INLINE void drawElementsAB(GLenum mode, GLintptr offset, GLsizei count) const noexcept
 		{
 			bind();
 			glDrawElements(mode, count, elementBufferIndexType, reinterpret_cast<void*>(offset));
 		}
 
-		/// @brief Call this only if the correct VAO is already bound.
-		/// See draw() for the version that binds this VAO automatically.
-		GAL_INLINE void drawElementsUnbound(GLenum mode, GLintptr offset, GLsizei count) const noexcept
+		/// @brief Draws this VAO using its EBO.
+		GAL_INLINE void drawElementsNB(GLenum mode, GLintptr offset, GLsizei count) const noexcept
 		{
 			glDrawElements(mode, count, elementBufferIndexType, reinterpret_cast<void*>(offset));
 		}

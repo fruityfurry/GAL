@@ -23,10 +23,16 @@ int main()
 	gal::Window window = gal::Window(800, 600, "Hello! I'm using GAL!");
 	window.setClearColor(0.1f, 0.2f, 0.2f, 1.0f);
 
+	// ============ Shader ============
+
 	gal::ShaderProgram shader = gal::ShaderProgram();
 	shader.addShaderFromFile("vert.vert", gal::ShaderType::Vertex)
 		.addShaderFromFile("frag.frag", gal::ShaderType::Fragment)
 		.link();
+
+	shader.use();
+
+	// ============ buffers ============
 
 	gal::VertexP3C3T2 vertices[] =
 	{
@@ -58,7 +64,8 @@ int main()
 	vao.bindElementBuffer(ebo, GL_UNSIGNED_INT);
 
 	vao.bind();
-	shader.use();
+
+	// ============ Texture ============
 
 	gal::Texture tex = gal::Texture(gal::TextureType::TwoD);
 
@@ -72,11 +79,10 @@ int main()
 
 	unsigned char* data = stbi_load("resources/tar_child.png", &width, &height, &channels, 0);
 
-	tex.image(0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, data, width, height);
-	tex.generateMipmap();
-
+	tex.imageAB(0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, data, width, height);
 	stbi_image_free(data);
-
+	
+	tex.generateMipmapAB();
 	tex.bindTextureUnit(0);
 
 	shader.setUniform("texture1", 0);
@@ -90,7 +96,7 @@ int main()
 		window.clearBackground();
 
 		shader.setUniform("t", static_cast<float>(glfwGetTime()));
-		vao.drawElementsUnbound(GL_TRIANGLES, 0, 6);
+		vao.drawElementsNB(GL_TRIANGLES, 0, 6);
 
 		window.swapBuffers();  // Swap buffers. your update loop should end with this.
 	}

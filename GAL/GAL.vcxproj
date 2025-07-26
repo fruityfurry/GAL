@@ -24,6 +24,7 @@
   <ItemGroup>
     <ClInclude Include="detail\attributes.hpp" />
     <ClInclude Include="detail\Buffer.hpp" />
+    <ClInclude Include="detail\debug.hpp" />
     <ClInclude Include="detail\enums.hpp" />
     <ClInclude Include="detail\glParams.hpp" />
     <ClInclude Include="detail\init.hpp" />

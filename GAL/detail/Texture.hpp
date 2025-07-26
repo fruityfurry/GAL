@@ -59,8 +59,7 @@ namespace gal
 		GAL_INLINE void setParameter(GLenum parameterName, float* vals) noexcept { glTextureParameterfv(textureID, parameterName, vals); }
 		GAL_INLINE void setParameter(GLenum parameterName, int* vals) noexcept { glTextureParameteriv(textureID, parameterName, vals); }
 
-		/// @brief Allocate immutable storage for this texture. Picks between the various glTextureStorage*D functions
-		/// based on which of the dimension parameters were changed from the default zero when calling the function.
+		/// @brief Allocate immutable storage for this texture.
 		GAL_INLINE void storage(GLint mipmapLevels, GLenum internalFormat, GLsizei width, GLsizei height = 0, GLsizei depth = 0) noexcept
 		{
 			if (height == 0 && depth == 0)
@@ -75,11 +74,18 @@ namespace gal
 			this->depth = depth;
 		}
 
-		GAL_INLINE void image(GLenum mipmapLevel, GLenum internalFormat, GLenum format, GLenum type, const void* data, 
+		/// @brief Bind this texture, then allocate and write to mutable storage for it. 
+		GAL_INLINE void imageAB(GLenum mipmapLevel, GLenum internalFormat, GLenum format, GLenum type, const void* data,
 			GLsizei width, GLsizei height = 0, GLsizei depth = 0) noexcept
 		{
 			bind();
+			imageNB(mipmapLevel, internalFormat, format, type, data, width, height, depth);
+		}
 
+		/// @brief Allocate and write to mutable storage for this texture. 
+		GAL_INLINE void imageNB(GLenum mipmapLevel, GLenum internalFormat, GLenum format, GLenum type, const void* data, 
+			GLsizei width, GLsizei height = 0, GLsizei depth = 0) noexcept
+		{
 			if (height == 0 && depth == 0)
 				glTexImage1D(this->type, mipmapLevel, internalFormat, width, 0, format, type, data);
 			else if (depth == 0)
@@ -92,9 +98,16 @@ namespace gal
 			this->depth = depth;
 		}
 
-		GAL_INLINE void generateMipmap() noexcept
+		/// @brief Binds this texture and generates its mipmap. 
+		GAL_INLINE void generateMipmapAB() noexcept
 		{
 			bind();
+			glGenerateMipmap(type);
+		}
+
+		/// @brief Generates this texture's mipmap. 
+		GAL_INLINE void generateMipmapNB() noexcept
+		{
 			glGenerateMipmap(type);
 		}
 
