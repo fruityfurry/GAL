@@ -13,7 +13,6 @@ C++17 and OpenGL 4.5 or later required.
 ## Dependencies:
 - GLAD
 - GLFW3
-#### Probably going to be dependencies later if I get around to the features that use them:
 - GLM
 
 All these files should be accessible directly by their header file names (e.g., #include <glfw3.h> should work) and not through an extra directory (so not #include <glfw3/glfw3.h>), except in the case of glm (if i get around to those features), which should be accessible like #include <glm/glm.hpp>. See the GAL_NO_*_INCLUDE macros to get around this.
@@ -23,7 +22,7 @@ All these files should be accessible directly by their header file names (e.g., 
 ## Optional Macros:
 - `GAL_NO_GLAD_INCLUDE`: Don't include GLAD in gal.hpp. This means it's now your responsibility to include it before you include gal.hpp.
 - `GAL_NO_GLFW_INCLUDE`: Don't include GLFW in gal.hpp. This means it's now your responsibility to include it before you include gal.hpp.
-- `GAL_NO_GLM_INCLUDE`: Don't include GLM in gal.hpp. This means it's now your responsibility to include it before you include gal.hpp.
+- `GAL_NO_GLM_INCLUDE`: Don't include GLM in gal.hpp. This means it's now your responsibility to include it (by including detail/glmIncludes.hpp ideally, as it includes all the modules GAL needs) before you include gal.hpp.
 - `GAL_SUPPRESS_LOGS`: Suppresses all console logging GAL does.
 - `GAL_WARNINGS`: Enables logging of warnings to console when non-fatal errors occur (Not that any have been added yet, I might get rid of this macro if it turns out it isn't needed).
 - `GAL_DISABLE_MIN_GL_VERSION`: Disable check for minimum OpenGL version (4.5) when calling setOpenGLVersion(). It is NOT recommended to do this, and the behaviour of GAL when this macro is defined is undocumented, but this option is here as a last resort.
