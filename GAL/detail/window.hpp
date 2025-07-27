@@ -24,11 +24,6 @@ namespace gal
 		GAL_INLINE int openGLVersionMinor = -1;
 
 		GAL_INLINE bool postGLInitialized = false;
-
-		GAL_INLINE void defaultResizeCallback(GLFWwindow* window, int width, int height)
-		{
-			glViewport(0, 0, width, height);
-		}
 	}
 
 	/// @brief Set the version of OpenGL to be used from now on. Cannot be called more than once unless terminate() is called.
@@ -98,8 +93,10 @@ namespace gal
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+			glfwSetWindowUserPointer(window, this);
+
 			if (resizable)
-				glfwSetFramebufferSizeCallback(window, detail::defaultResizeCallback);
+				glfwSetFramebufferSizeCallback(window, defaultResizeCallback);
 			if (vsync)
 				glfwSwapInterval(1);
 		}
@@ -148,10 +145,40 @@ namespace gal
 		/// @brief Clear the background of the window with the background color set by setClearColor(). Default is black.
 		GAL_INLINE void clearBackground() noexcept { glClear(GL_COLOR_BUFFER_BIT); }
 
+		/// @brief Get the matrix used to convert screenspace coordinates to Normalized Device Coordinates. 
+		GAL_NODISCARD GAL_INLINE glm::mat4 getScreenspaceToNDCMat() const noexcept
+		{
+			glm::mat4 mat(1.0f);
+			mat = glm::translate(mat, { -1.0f, 1.0f, 0.0f });
+			mat = glm::scale(mat, { 2.0f / width, -2.0f / height, 1.0f });
+
+			return mat;
+		}
+
+		/// @brief Convert a set of screenspace coordinates to Normalized Device Coordinates for use with OpenGL.
+		/// Try to use this only for one-off calculations, as this recalculates the conversion matrix every time.
+		GAL_NODISCARD GAL_INLINE glm::vec2 screenspaceToNDC(const glm::vec2& vec) const noexcept
+		{
+			const glm::vec4 NDCCoords = getScreenspaceToNDCMat() * glm::vec4(vec.x, vec.y, 0.0f, 1.0f);
+			return glm::vec2(NDCCoords.x, NDCCoords.y);
+		}
+
 	private:
 		GLFWwindow* window;
 		int width;
 		int height;
+
+		GAL_INLINE static void defaultResizeCallback(GLFWwindow* glfwWindow, int width, int height)
+		{
+			void* userPtr = glfwGetWindowUserPointer(glfwWindow);
+			if (!userPtr) return;
+
+			Window* window = static_cast<Window*>(userPtr);
+			window->width = width;
+			window->height = height;
+
+			glViewport(0, 0, width, height);
+		}
 	};
 }
 
