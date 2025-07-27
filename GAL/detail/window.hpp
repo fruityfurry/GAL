@@ -40,7 +40,7 @@ namespace gal
 #ifndef GAL_DISABLE_MIN_GL_VERSION
 		if (major < 4 || minor < 5)
 			detail::throwErr(ErrCode::GLVersionTooOld, "Attempted to create a window with a version of GLFW that was too low (< 4.5). "
-														 "Define GAL_DISABLE_MIN_GLFW_VERSION if you REALLY need to get around this.");
+													   "Define GAL_DISABLE_MIN_GLFW_VERSION if you REALLY need to get around this.");
 
 		detail::openGLVersionMajor = major;
 		detail::openGLVersionMinor = minor;

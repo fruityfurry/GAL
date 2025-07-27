@@ -7,6 +7,9 @@
 #ifndef GAL_NO_GLFW_INCLUDE
 #include <glfw3.h>
 #endif
+#ifndef GAL_NO_GLM_INCLUDE
+#include "detail/glmIncludes.hpp"
+#endif
 
 #include "detail/Buffer.hpp"
 #include "detail/debug.hpp"

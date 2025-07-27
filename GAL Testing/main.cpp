@@ -54,7 +54,7 @@ int main()
 	vbo.allocateAndWrite(sizeof(vertices), vertices, gal::BufferUsageHint::StaticDraw);
 
 	vao.bindVertexBuffer(vbo, 0, 0, sizeof(gal::VertexP3C3T2));
-	vao.newVertexAttribute(0, 0, 3, 0, GL_FALSE, 0);
+	vao.newVertexAttribute(0, 0, 3, GL_FLOAT, GL_FALSE, 0);
 	vao.newVertexAttribute(1, 0, 3, GL_FLOAT, GL_FALSE, offsetof(gal::VertexP3C3T2, color));
 	vao.newVertexAttribute(2, 0, 2, GL_FLOAT, GL_FALSE, offsetof(gal::VertexP3C3T2, texCoords));
 	
@@ -77,7 +77,7 @@ int main()
 	stbi_set_flip_vertically_on_load(true);
 	int width, height, channels;
 
-	unsigned char* data = stbi_load("resources/tar_child.png", &width, &height, &channels, 0);
+	unsigned char* data = stbi_load("resources/pone.png", &width, &height, &channels, 0);
 
 	tex.imageAB(0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, data, width, height);
 	stbi_image_free(data);
@@ -86,6 +86,7 @@ int main()
 	tex.bindTextureUnit(0);
 
 	shader.setUniform("texture1", 0);
+	shader.setUniform("transparentColor", glm::vec4(0.0f, 1.0f, 1.0f, 0.2f));
 
 	while (!window.shouldClose())
 	{
