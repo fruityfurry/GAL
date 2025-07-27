@@ -50,8 +50,15 @@ namespace gal
 	class Window
 	{
 	public:
-		GAL_INLINE Window(int windowWidth, int windowHeight, const char* windowTitle, bool useCoreProfile = true,
-			bool resizable = false, bool vsync = false, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr)
+		/// @brief Create a window with the given parameters.
+		/// @param debugContext: Sets the GLFW_OPENGL_DEBUG_CONTEXT window hint accordingly. Also attaches a default
+		/// error message callback, which will print errors to the console unless GAL_SUPPRESS_LOGS is defined.
+		/// @param useCoreProfile: Sets the GLFW_OPENGL_PROFILE window hint to GLFW_OPENGL_CORE_PROFILE when true.
+		/// @param vsync: Calls glfwSwapInterval(1) when true.
+		/// @return 
+		GAL_INLINE Window(int windowWidth, int windowHeight, const char* windowTitle, bool debugContext = false,
+			bool useCoreProfile = true, bool resizable = false, bool vsync = false, GLFWmonitor* monitor = nullptr,
+			GLFWwindow* share = nullptr)
 			: width(windowWidth), height(windowHeight)
 		{
 			if (detail::openGLVersionMajor == -1 || detail::openGLVersionMinor == -1)
@@ -60,6 +67,7 @@ namespace gal
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, detail::openGLVersionMajor);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, detail::openGLVersionMinor);
 			glfwWindowHint(GLFW_RESIZABLE, resizable);
+			glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, debugContext);
 
 			if (useCoreProfile)
 				glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -74,6 +82,17 @@ namespace gal
 
 			if (!detail::postGLInitialized)
 				detail::postGLInit();
+
+			if (debugContext)
+			{
+				if (!(glParams::queryGLParamInt(GL_CONTEXT_FLAGS) & GL_CONTEXT_FLAG_DEBUG_BIT))
+					detail::throwErr(ErrCode::DebugContextCreationFailed, "Failed to create debug context.");
+
+				glEnable(GL_DEBUG_OUTPUT);
+				glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+				glDebugMessageCallback(detail::defaultDebugMessageCallback, nullptr);
+				glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+			}
 
 			glViewport(0, 0, windowWidth, windowHeight);
 			glEnable(GL_BLEND);

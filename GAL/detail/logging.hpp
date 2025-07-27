@@ -11,21 +11,23 @@ namespace gal
 	{
 		/// @brief Print a line with a red-colored message to cerr, along with a marker indicating this is a log message from GAL.
 		/// Can be suppressed by defining GAL_SUPPRESS_LOG.
-		GAL_INLINE void logErr(const char* msg)
+		template<typename T>
+		GAL_INLINE void logErr(T obj)
 		{
 #ifndef GAL_SUPPRESS_LOGS
-			std::cerr << "\u001b[31m" << "GAL_LOG: " << msg << "\u001b[37m\n";
+			std::cerr << "\u001b[31m" << "GAL_LOG: " << obj << "\u001b[37m\n";
 #else
 			(void)msg;
 #endif
 		}
 
-		/// @brief Print a line with a yellow-colored message to cerr, along with a marker indicating this is a log message from GAL.
+		/// @brief Print a message with a red-colored message to cerr, but with no marker and no newline.
 		/// Can be suppressed by defining GAL_SUPPRESS_LOG.
-		GAL_INLINE void logWarn(const char* msg)
+		template<typename T>
+		GAL_INLINE void logErrPart(T obj)
 		{
-#if defined(GAL_WARNINGS) and not defined(GAL_SUPPRESS_LOGS)
-			std::cerr << "\u001b[33m" << "GAL_LOG: " << msg << "\u001b[37m\n";
+#ifndef GAL_SUPPRESS_LOGS
+			std::cerr << "\u001b[31m" << obj << "\u001b[37m";
 #else
 			(void)msg;
 #endif

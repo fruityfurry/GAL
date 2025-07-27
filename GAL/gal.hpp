@@ -9,7 +9,7 @@
 #endif
 
 #include "detail/Buffer.hpp"
-#include "detail//debug.hpp"
+#include "detail/debug.hpp"
 #include "detail/enums.hpp"
 #include "detail/GALException.hpp"
 #include "detail/glParams.hpp"

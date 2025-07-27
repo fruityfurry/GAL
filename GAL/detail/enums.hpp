@@ -15,6 +15,7 @@ namespace gal
 		CreateWindowFailed, // Failed to create a window.
 		SetOpenGLVersionTwice, // Attempted to set OpenGL version twice.
 		OpenGLVersionUnset, // OpenGL Version left unset when creating a window.
+		DebugContextCreationFailed, // Failed to create debug context.
 
 		// Shader.
 		ShaderReadFailed, // Failed to read shader file.
@@ -47,6 +48,7 @@ namespace gal
 			case ErrCode::CreateWindowFailed: return "CreateWindowFailed";
 			case ErrCode::SetOpenGLVersionTwice: return "SetOpenGLVersionTwice";
 			case ErrCode::OpenGLVersionUnset: return "OpenGLVersionUnset";
+			case ErrCode::DebugContextCreationFailed: return "DebugContextCreationFailed";
 
 			case ErrCode::ShaderReadFailed: return "ShaderReadFailed";
 			case ErrCode::ShaderCompFailed: return "ShaderCompFailed";

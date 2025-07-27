@@ -20,7 +20,7 @@ int main()
 	gal::init(); // Initialize everything GAL needs before calling any other GAL function.
 	gal::setOpenGLVersion(4, 5);  // OpenGL version must be set before creating a window.
 
-	gal::Window window = gal::Window(800, 600, "Hello! I'm using GAL!");
+	gal::Window window = gal::Window(800, 600, "Hello! I'm using GAL!", true);
 	window.setClearColor(0.1f, 0.2f, 0.2f, 1.0f);
 
 	// ============ Shader ============
@@ -54,7 +54,7 @@ int main()
 	vbo.allocateAndWrite(sizeof(vertices), vertices, gal::BufferUsageHint::StaticDraw);
 
 	vao.bindVertexBuffer(vbo, 0, 0, sizeof(gal::VertexP3C3T2));
-	vao.newVertexAttribute(0, 0, 3, GL_FLOAT, GL_FALSE, 0);
+	vao.newVertexAttribute(0, 0, 3, 0, GL_FALSE, 0);
 	vao.newVertexAttribute(1, 0, 3, GL_FLOAT, GL_FALSE, offsetof(gal::VertexP3C3T2, color));
 	vao.newVertexAttribute(2, 0, 2, GL_FLOAT, GL_FALSE, offsetof(gal::VertexP3C3T2, texCoords));
 	
