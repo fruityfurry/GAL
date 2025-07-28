@@ -16,6 +16,7 @@ namespace gal
 		SetOpenGLVersionTwice, // Attempted to set OpenGL version twice.
 		OpenGLVersionUnset, // OpenGL Version left unset when creating a window.
 		DebugContextCreationFailed, // Failed to create debug context.
+		UserPointerNull, // The user pointer used to update gal::Window state was null.
 
 		// Shader.
 		ShaderReadFailed, // Failed to read shader file.
@@ -49,6 +50,7 @@ namespace gal
 			case ErrCode::SetOpenGLVersionTwice: return "SetOpenGLVersionTwice";
 			case ErrCode::OpenGLVersionUnset: return "OpenGLVersionUnset";
 			case ErrCode::DebugContextCreationFailed: return "DebugContextCreationFailed";
+			case ErrCode::UserPointerNull: return "UserPointerNull";
 
 			case ErrCode::ShaderReadFailed: return "ShaderReadFailed";
 			case ErrCode::ShaderCompFailed: return "ShaderCompFailed";

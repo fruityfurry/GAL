@@ -45,7 +45,8 @@ namespace gal
 	class Window
 	{
 	public:
-		/// @brief Create a window with the given parameters.
+		/// @brief Create a window with the given parameters. If setting your own resize callback,
+		/// make sure to call Window::resizeUpdate() at the start.
 		/// @param debugContext: Sets the GLFW_OPENGL_DEBUG_CONTEXT window hint accordingly. Also attaches a default
 		/// error message callback, which will print errors to the console unless GAL_SUPPRESS_LOGS is defined.
 		/// @param useCoreProfile: Sets the GLFW_OPENGL_PROFILE window hint to GLFW_OPENGL_CORE_PROFILE when true.
@@ -99,6 +100,8 @@ namespace gal
 				glfwSetFramebufferSizeCallback(window, defaultResizeCallback);
 			if (vsync)
 				glfwSwapInterval(1);
+
+			NDCMatrix = calculateNDCMatrix(width, height);
 		}
 
 		// Forbid copying.
@@ -145,8 +148,61 @@ namespace gal
 		/// @brief Clear the background of the window with the background color set by setClearColor(). Default is black.
 		GAL_INLINE void clearBackground() noexcept { glClear(GL_COLOR_BUFFER_BIT); }
 
+		GAL_INLINE void setCacheNDCMatrix(bool val) noexcept
+		{
+			cacheNDCMatrix = val;
+		}
+
+		/// @brief Recalculate the screenspace to NDC conversion matrix. You only need to call this if you
+		/// called setCacheNDCMatrix(false).
+		GAL_NODISCARD GAL_INLINE void calculateNDCMatrix() noexcept
+		{
+			glm::mat4 mat(1.0f);
+			mat = glm::translate(mat, { -1.0f, 1.0f, 0.0f });
+			mat = glm::scale(mat, { 2.0f / width, -2.0f / height, 1.0f });
+
+			NDCMatrix = mat;
+		}
+
 		/// @brief Get the matrix used to convert screenspace coordinates to Normalized Device Coordinates. 
-		GAL_NODISCARD GAL_INLINE glm::mat4 getScreenspaceToNDCMat() const noexcept
+		GAL_NODISCARD GAL_INLINE glm::mat4 getScreenspaceToNDCMatrix() const noexcept
+		{
+			return NDCMatrix;
+		}
+
+		/// @brief Convert a set of screenspace coordinates to Normalized Device Coordinates for use with OpenGL.
+		/// This uses a cached conversion matrix (unless you called setCacheNDCMatrix(false)), so don't worry about
+		/// recalculating the matrix every call.
+		GAL_NODISCARD GAL_INLINE glm::vec2 screenspaceToNDC(const glm::vec2& vec) const noexcept
+		{
+			const glm::vec4 NDCCoords = NDCMatrix * glm::vec4(vec.x, vec.y, 0.0f, 1.0f);
+			return glm::vec2(NDCCoords.x, NDCCoords.y);
+		}
+
+		/// @brief Call this at the start of any custom resize callbacks, or the internal state of the window will not be kept up-to-date.
+		GAL_STATIC GAL_INLINE void resizeUpdate(GLFWwindow* glfwWindow, int width, int height)
+		{
+			void* userPtr = glfwGetWindowUserPointer(glfwWindow);
+			if (!userPtr)
+				detail::throwErr(ErrCode::UserPointerNull, "The user pointer used to update gal::Window state was null.");
+
+			Window* window = static_cast<Window*>(userPtr);
+			window->width = width;
+			window->height = height;
+
+			if (window->cacheNDCMatrix)
+				window->NDCMatrix = calculateNDCMatrix(width, height);
+		}
+
+	private:
+		GLFWwindow* window;
+		int width;
+		int height;
+
+		glm::mat4 NDCMatrix;
+		bool cacheNDCMatrix = true;
+
+		GAL_NODISCARD GAL_STATIC GAL_INLINE glm::mat4 calculateNDCMatrix(int width, int height) noexcept
 		{
 			glm::mat4 mat(1.0f);
 			mat = glm::translate(mat, { -1.0f, 1.0f, 0.0f });
@@ -155,27 +211,9 @@ namespace gal
 			return mat;
 		}
 
-		/// @brief Convert a set of screenspace coordinates to Normalized Device Coordinates for use with OpenGL.
-		/// Try to use this only for one-off calculations, as this recalculates the conversion matrix every time.
-		GAL_NODISCARD GAL_INLINE glm::vec2 screenspaceToNDC(const glm::vec2& vec) const noexcept
+		GAL_STATIC GAL_INLINE void defaultResizeCallback(GLFWwindow* glfwWindow, int width, int height)
 		{
-			const glm::vec4 NDCCoords = getScreenspaceToNDCMat() * glm::vec4(vec.x, vec.y, 0.0f, 1.0f);
-			return glm::vec2(NDCCoords.x, NDCCoords.y);
-		}
-
-	private:
-		GLFWwindow* window;
-		int width;
-		int height;
-
-		GAL_INLINE static void defaultResizeCallback(GLFWwindow* glfwWindow, int width, int height)
-		{
-			void* userPtr = glfwGetWindowUserPointer(glfwWindow);
-			if (!userPtr) return;
-
-			Window* window = static_cast<Window*>(userPtr);
-			window->width = width;
-			window->height = height;
+			resizeUpdate(glfwWindow, width, height);
 
 			glViewport(0, 0, width, height);
 		}
