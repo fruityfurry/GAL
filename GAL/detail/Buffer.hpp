@@ -54,8 +54,13 @@ namespace gal
 		/// @brief Get the current size of this buffer. Returns NullSize if the buffer has not been allocated yet. 
 		GAL_NODISCARD GAL_INLINE GLsizeiptr getSize() const noexcept { return size; }
 
-		/// @brief Get the usage hint applied to this buffer. Returns BufferUsageHint::Null if the buffer has not been allocated yet. 
+		/// @brief Get the usage hint applied to this buffer. Returns BufferUsageHint::Null if the buffer has not been allocated yet
+		/// or the buffer was allocated immutably. 
 		GAL_NODISCARD GAL_INLINE BufferUsageHint getUsageHint() const noexcept { return usageHint; }
+
+		/// @brief Get the flags applied to this buffer. Returns 0 if the buffer has not been allocated yet
+		/// or the buffer was allocated mutably. 
+		GAL_NODISCARD GAL_INLINE GLbitfield getFlags() const noexcept { return flags; }
 
 		/// @brief Query whether this buffer has been allocated or not. If not, many functions will fail.
 		GAL_NODISCARD GAL_INLINE bool isAllocated() const noexcept { return allocated; }
@@ -64,6 +69,24 @@ namespace gal
 		GAL_INLINE void bind() const noexcept
 		{
 			glBindBuffer(type, bufferID);
+		}
+
+		/// @brief Allocate given space in VRAM for this buffer immutably, meaning it cannot be reallocated.
+		GAL_INLINE void allocateImmutable(GLsizeiptr size, GLbitfield flags)
+		{
+			glNamedBufferStorage(bufferID, size, nullptr, flags);
+
+			this->size = size;
+			this->flags = flags;
+		}
+
+		/// @brief Allocate and write to given space in VRAM for this buffer immutably, meaning it cannot be reallocated.
+		GAL_INLINE void allocateImmutable(GLsizeiptr size, const void* data, GLbitfield flags)
+		{
+			glNamedBufferStorage(bufferID, size, data, flags);
+
+			this->size = size;
+			this->flags = flags;
 		}
 
 		/// @brief Allocate given space in VRAM for this buffer with the given usage hint but don't fill it,
@@ -162,6 +185,7 @@ namespace gal
 		GLenum type;
 		GLsizeiptr size = type::NullSize;
 		BufferUsageHint usageHint = BufferUsageHint::Null;
+		GLbitfield flags = 0;
 
 		bool allocated = false;
 
