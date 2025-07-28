@@ -7,11 +7,13 @@
 
 static void processInput(const gal::Window& window)
 {
+	using namespace gal::keyboard;
+
 	// Can use regular glfw callback too.
-	if (gal::isKeyPressed(GLFW_KEY_ESCAPE))
+	if (isKeyPressed(GLFW_KEY_ESCAPE))
 		window.setShouldClose(true);
 
-	if (gal::isKeyPressed(GLFW_KEY_0))
+	if (isKeyPressed(GLFW_KEY_0))
 		std::cout << "Hey, you just pressed zero!\n";
 }
 
@@ -20,7 +22,7 @@ int main()
 	gal::init(); // Initialize everything GAL needs before calling any other GAL function.
 	gal::setOpenGLVersion(4, 5);  // OpenGL version must be set before creating a window.
 
-	gal::Window window = gal::Window(800, 600, "Hello! I'm using GAL!", true);
+	gal::Window window = gal::Window(800, 600, "Hello! I'm using GAL!", true, true, true);
 	window.setClearColor(0.1f, 0.2f, 0.2f, 1.0f);
 
 	// ============ Shader ============

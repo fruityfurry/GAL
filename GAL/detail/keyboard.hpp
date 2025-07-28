@@ -35,44 +35,47 @@ namespace gal
 		}
 	}
 
-	/// @brief Returns true once when a key is first pressed.
-	/// Remember to call pollEvents() to keep the internal key states updated.
-	GAL_NODISCARD GAL_INLINE bool isKeyPressed(int key)
+	namespace keyboard
 	{
-		if (!detail::isValidKey(key))
-			return false;
+		/// @brief Returns true once when a key is first pressed.
+		/// Remember to call pollEvents() to keep the internal key states updated.
+		GAL_NODISCARD GAL_INLINE bool isKeyPressed(int key)
+		{
+			if (!detail::isValidKey(key))
+				return false;
 
-		return detail::currKeyStates[key] && !detail::prevKeyStates[key];
-	}
+			return detail::currKeyStates[key] && !detail::prevKeyStates[key];
+		}
 
-	/// @brief Returns true once when a key is first released.
-	/// Remember to call pollEvents() to keep the internal key states updated.
-	GAL_NODISCARD GAL_INLINE bool isKeyReleased(int key)
-	{
-		if (!detail::isValidKey(key))
-			return false;
+		/// @brief Returns true once when a key is first released.
+		/// Remember to call pollEvents() to keep the internal key states updated.
+		GAL_NODISCARD GAL_INLINE bool isKeyReleased(int key)
+		{
+			if (!detail::isValidKey(key))
+				return false;
 
-		return !detail::currKeyStates[key] && detail::prevKeyStates[key];
-	}
+			return !detail::currKeyStates[key] && detail::prevKeyStates[key];
+		}
 
-	/// @brief Returns true if the key is currently held down.
-	/// Remember to call pollEvents() to keep the internal key states updated.
-	GAL_NODISCARD GAL_INLINE bool isKeyDown(int key)
-	{
-		if (!detail::isValidKey(key))
-			return false;
+		/// @brief Returns true if the key is currently held down.
+		/// Remember to call pollEvents() to keep the internal key states updated.
+		GAL_NODISCARD GAL_INLINE bool isKeyDown(int key)
+		{
+			if (!detail::isValidKey(key))
+				return false;
 
-		return detail::currKeyStates[key];
-	}
+			return detail::currKeyStates[key];
+		}
 
-	/// @brief Returns true if the key is not currently held.
-	/// Remember to call pollEvents() to keep the internal key states updated.
-	GAL_NODISCARD GAL_INLINE bool isKeyUp(int key)
-	{
-		if (!detail::isValidKey(key))
-			return false;
+		/// @brief Returns true if the key is not currently held.
+		/// Remember to call pollEvents() to keep the internal key states updated.
+		GAL_NODISCARD GAL_INLINE bool isKeyUp(int key)
+		{
+			if (!detail::isValidKey(key))
+				return false;
 
-		return !detail::currKeyStates[key];
+			return !detail::currKeyStates[key];
+		}
 	}
 }
 
