@@ -36,10 +36,10 @@ namespace gal
 		if (major < 4 || minor < 5)
 			detail::throwErr(ErrCode::GLVersionTooOld, "Attempted to create a window with a version of GLFW that was too low (< 4.5). "
 													   "Define GAL_DISABLE_MIN_GLFW_VERSION if you REALLY need to get around this.");
+#endif
 
 		detail::openGLVersionMajor = major;
 		detail::openGLVersionMinor = minor;
-#endif
 	}
 
 	class Window
@@ -69,7 +69,7 @@ namespace gal
 				glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 			window = glfwCreateWindow(windowWidth, windowHeight, windowTitle, monitor, share);
-			if (!window)
+			if (window == nullptr)
 				detail::throwErr(ErrCode::CreateWindowFailed, "Failed to create window.");
 
 			detail::windowTracker.add(window);
@@ -183,7 +183,7 @@ namespace gal
 		GAL_STATIC GAL_INLINE void resizeUpdate(GLFWwindow* glfwWindow, int width, int height)
 		{
 			void* userPtr = glfwGetWindowUserPointer(glfwWindow);
-			if (!userPtr)
+			if (userPtr == nullptr)
 				detail::throwErr(ErrCode::UserPointerNull, "The user pointer used to update gal::Window state was null.");
 
 			Window* window = static_cast<Window*>(userPtr);

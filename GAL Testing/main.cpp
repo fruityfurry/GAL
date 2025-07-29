@@ -22,7 +22,7 @@ int main()
 	gal::init(); // Initialize everything GAL needs before calling any other GAL function.
 	gal::setOpenGLVersion(4, 5);  // OpenGL version must be set before creating a window.
 
-	gal::Window window = gal::Window(800, 600, "Hello! I'm using GAL!", true, true, true);
+	gal::Window window = gal::Window(800, 600, "Hello! I'm using GAL!", true);
 	window.setClearColor(0.1f, 0.2f, 0.2f, 1.0f);
 
 	// ============ Shader ============

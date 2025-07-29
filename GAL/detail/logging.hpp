@@ -16,8 +16,6 @@ namespace gal
 		{
 #ifndef GAL_SUPPRESS_LOGS
 			std::cerr << "\u001b[31m" << "GAL_LOG: " << obj << "\u001b[37m\n";
-#else
-			(void)msg;
 #endif
 		}
 
@@ -28,8 +26,6 @@ namespace gal
 		{
 #ifndef GAL_SUPPRESS_LOGS
 			std::cerr << "\u001b[31m" << obj << "\u001b[37m";
-#else
-			(void)msg;
 #endif
 		}
 	}

@@ -10,6 +10,8 @@ namespace gal
 		float position[2];
 	};
 
+
+
 	/// @brief Simple built-in vertex struct.
 	/// 2-component position.
 	/// 3-component color.
@@ -217,6 +219,20 @@ namespace gal
 		float position[3];
 		float normal[3];
 		float texCoords[2];
+	};
+
+	/// @brief Simple built-in vertex struct.
+	/// 3-component normal.
+	struct VertexN3
+	{
+		float normal[3];
+	};
+
+	/// @brief Simple built-in vertex struct.
+	/// 2-component texture coordinates.
+	struct VertexT2
+	{
+		float texCoords[3];
 	};
 }
 
