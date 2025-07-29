@@ -15,7 +15,7 @@ C++17 and OpenGL 4.5 or later required.
 - GLFW3
 - GLM
 
-All these files should be accessible directly by their header file names (e.g., #include <glfw3.h> should work) and not through an extra directory (so not #include <glfw3/glfw3.h>), except in the case of glm (if i get around to those features), which should be accessible like #include <glm/glm.hpp>. See the GAL_NO_*_INCLUDE macros to get around this.
+All these files should be accessible directly by their header file names (e.g., #include <glfw3.h> should work) and not through an extra directory (so not #include <glfw3/glfw3.h>), except in the case of glm, which should be accessible like #include <glm/glm.hpp>. See the GAL_NO_*_INCLUDE macros to get around this.
 
 ###### I've never made a proper header only library I have no idea how you're meant to elegantly handle external dependencies
 
