@@ -93,6 +93,7 @@ namespace gal
 			glViewport(0, 0, windowWidth, windowHeight);
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glEnable(GL_DEPTH_TEST);
 
 			glfwSetWindowUserPointer(window, this);
 
@@ -145,8 +146,14 @@ namespace gal
 		/// @brief Set window's clear color. Subsequent calls to clearBackground, if not overriden, will now use this color.
 		GAL_INLINE void setClearColor(float r, float g, float b, float a) noexcept { glClearColor(r, g, b, a); }
 
-		/// @brief Clear the background of the window with the background color set by setClearColor(). Default is black.
-		GAL_INLINE void clearBackground() noexcept { glClear(GL_COLOR_BUFFER_BIT); }
+		/// @brief Clear the given buffers.
+		GAL_INLINE void clear(GLbitfield bits) { glClear(bits); }
+
+		// Set the front and back polygon mode to the given mode.
+		GAL_INLINE void setPolygonMode(PolygonMode mode)
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, static_cast<GLenum>(mode));
+		}
 
 		GAL_INLINE void setCacheNDCMatrix(bool val) noexcept
 		{
