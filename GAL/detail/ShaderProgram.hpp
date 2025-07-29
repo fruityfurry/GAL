@@ -311,55 +311,55 @@ namespace gal
 
 		// ========== matrix uniform setters ==========
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat2& mat, bool transpose) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat2& mat, bool transpose = false) const noexcept
 		{
 			glProgramUniformMatrix2fv(programID, getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(mat));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat3& mat, bool transpose) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat3& mat, bool transpose = false) const noexcept
 		{
 			glProgramUniformMatrix3fv(programID, getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(mat));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat4& mat, bool transpose) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat4& mat, bool transpose = false) const noexcept
 		{
 			glProgramUniformMatrix4fv(programID, getUniformLocation(name), 1, transpose, glm::value_ptr(mat));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat2x3& mat, bool transpose) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat2x3& mat, bool transpose = false) const noexcept
 		{
 			glProgramUniformMatrix2x3fv(programID, getUniformLocation(name), 1, transpose, glm::value_ptr(mat));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat3x2& mat, bool transpose) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat3x2& mat, bool transpose = false) const noexcept
 		{
 			glProgramUniformMatrix3x2fv(programID, getUniformLocation(name), 1, transpose, glm::value_ptr(mat));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat2x4& mat, bool transpose) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat2x4& mat, bool transpose = false) const noexcept
 		{
 			glProgramUniformMatrix2x4fv(programID, getUniformLocation(name), 1, transpose, glm::value_ptr(mat));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat4x2& mat, bool transpose) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat4x2& mat, bool transpose = false) const noexcept
 		{
 			glProgramUniformMatrix4x2fv(programID, getUniformLocation(name), 1, transpose, glm::value_ptr(mat));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat3x4& mat, bool transpose) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat3x4& mat, bool transpose = false) const noexcept
 		{
 			glProgramUniformMatrix3x4fv(programID, getUniformLocation(name), 1, transpose, glm::value_ptr(mat));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat4x3& mat, bool transpose) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat4x3& mat, bool transpose = false) const noexcept
 		{
 			glProgramUniformMatrix4x3fv(programID, getUniformLocation(name), 1, transpose, glm::value_ptr(mat));
 			return *this;

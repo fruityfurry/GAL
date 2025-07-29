@@ -36,18 +36,48 @@ int main()
 
 	// ============ buffers ============
 
-	gal::VertexP3C3T2 vertices[] =
-	{
-		{ { -0.5f, -0.5f, 0.0f }, { 1.0f, 0.0f, 0.0f }, { 0.0f, 0.0f } },  // bottom left
-		{ {  0.5f, -0.5f, 0.0f }, { 0.0f, 1.0f, 0.0f }, { 1.0f, 0.0f } },  // bottom right
-		{ { -0.5f,  0.5f, 0.0f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f } },  // top left
-		{ {  0.5f,  0.5f, 0.0f }, { 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f } }   // top right
-	};
+	gal::VertexP3T2 vertices[] = {
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 
-	unsigned int indices[] =
-	{
-		0, 1, 2,
-		1, 2, 3
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
 
 	gal::VertexArray vao = gal::VertexArray();
@@ -55,15 +85,9 @@ int main()
 	gal::Buffer vbo = gal::Buffer(gal::BufferType::Array);
 	vbo.allocateAndWrite(sizeof(vertices), vertices, gal::BufferUsageHint::StaticDraw);
 
-	vao.bindVertexBuffer(vbo, 0, 0, sizeof(gal::VertexP3C3T2));
+	vao.bindVertexBuffer(vbo, 0, 0, sizeof(gal::VertexP3T2));
 	vao.newVertexAttribute(0, 0, 3, GL_FLOAT, GL_FALSE, 0);
-	vao.newVertexAttribute(1, 0, 3, GL_FLOAT, GL_FALSE, offsetof(gal::VertexP3C3T2, color));
-	vao.newVertexAttribute(2, 0, 2, GL_FLOAT, GL_FALSE, offsetof(gal::VertexP3C3T2, texCoords));
-	
-	gal::Buffer ebo = gal::Buffer(gal::BufferType::ElementArray);
-	ebo.allocateAndWrite(sizeof(indices), indices, gal::BufferUsageHint::StaticDraw);
-
-	vao.bindElementBuffer(ebo, GL_UNSIGNED_INT);
+	vao.newVertexAttribute(1, 0, 2, GL_FLOAT, GL_FALSE, offsetof(gal::VertexP3T2, texCoords));
 
 	vao.bind();
 
@@ -87,8 +111,26 @@ int main()
 	tex.generateMipmapAB();
 	tex.bindTextureUnit(0);
 
+	// ============ Uniforms ============
+
 	shader.setUniform("texture1", 0);
 	shader.setUniform("transparentColor", glm::vec4(0.0f, 1.0f, 1.0f, 0.2f));
+
+	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(-10.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+	glm::mat4 view = glm::mat4(1.0f);
+	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+
+	glm::mat4 projection;
+	projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+
+	shader.setUniform("model", model);
+	shader.setUniform("view", view);
+	shader.setUniform("projection", projection);
+
+	glEnable(GL_DEPTH_TEST);
 
 	while (!window.shouldClose())
 	{
@@ -97,9 +139,10 @@ int main()
 		processInput(window);
 
 		window.clearBackground();
+		glClear(GL_DEPTH_BUFFER_BIT);
 
 		shader.setUniform("t", static_cast<float>(glfwGetTime()));
-		vao.drawElementsNB(GL_TRIANGLES, 0, 6);
+		vao.drawNB(GL_TRIANGLES, 0, 36);
 
 		window.swapBuffers();  // Swap buffers. your update loop should end with this.
 	}
