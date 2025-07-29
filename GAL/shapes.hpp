@@ -7,28 +7,6 @@ namespace gal
 {
 	namespace detail
 	{
-		/*template<size_t... sizes>
-		GAL_INLINE std::vector<float> interleaveVertexAttributes(const std::vector<std::array<float, sizes>>&... attributes)
-		{
-			constexpr size_t attributeCount = sizeof...(sizes);
-			const size_t vertexCount = std::get<0>(std::tie(attributes...));
-			const size_t floatsPerVertex = (sizes + ...);
-
-			std::vector<float> result;
-			result.reserve(vertexCount * floatsPerVertex);
-
-			for (std::size_t i = 0; i < vertexCount; ++i)
-			{
-				([&]
-				{
-					const auto& attribute = attributes[i];
-					result.insert(result.end(), attribute.begin(), attribute.end());
-				}(), ...);
-			}
-
-			return result;
-		}*/
-
 		GAL_INLINE std::vector<float> interleaveVertexAttributes(
 			std::vector<std::array<float, 3>>* positions,
 			std::vector<std::array<float, 3>>* normals,
