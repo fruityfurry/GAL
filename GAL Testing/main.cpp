@@ -1,7 +1,7 @@
 #define GAL_WARNINGS
 #define STB_IMAGE_IMPLEMENTATION
 #include <gal.hpp>
-#include <iostream>
+#include <shapes.hpp>
 
 #include "stb_image.h"
 
@@ -40,6 +40,7 @@ int main()
 
 	// ============ Shader ============
 
+	// GAL tries to make clearer the way OpenGL wants you to think of their objects. OpenGL is really an object-oriented library at heart.
 	gal::ShaderProgram shader = gal::ShaderProgram();
 	shader.addShaderFromFile("vert.vert", gal::ShaderType::Vertex)
 		.addShaderFromFile("frag.frag", gal::ShaderType::Fragment)
@@ -49,24 +50,17 @@ int main()
 
 	// ============ buffers ============
 
-	std::vector<gal::VertexP3> positions;
-	std::vector<gal::VertexT2> texCoords;
-
-	gal::shapes::generateCubeVertices(6, &positions, nullptr, &texCoords);
+	// generateCubeVertices outputs vertex data for the attributes you choose, in this case position and texture coordinates.
+	std::vector<float> vertices = gal::shapes::generateCubeVertices(6, false, true);
 
 	gal::VertexArray vao = gal::VertexArray();
 
-	gal::Buffer vbo1 = gal::Buffer(gal::BufferType::Array);
-	vbo1.allocateAndWrite(positions.size() * sizeof(gal::VertexP3), positions.data(), gal::BufferUsageHint::StaticDraw);
+	gal::Buffer vbo = gal::Buffer(gal::BufferType::Array);
+	vbo.allocateAndWrite(vertices, gal::BufferUsageHint::StaticDraw);
 
-	gal::Buffer vbo2 = gal::Buffer(gal::BufferType::Array);
-	vbo2.allocateAndWrite(positions.size() * sizeof(gal::VertexT2), texCoords.data(), gal::BufferUsageHint::StaticDraw);
-
-	vao.bindVertexBuffer(vbo1, 0, 0, sizeof(gal::VertexP3));
-	vao.bindVertexBuffer(vbo2, 1, 0, sizeof(gal::VertexT2));
-
+	vao.bindVertexBuffer(vbo, 0, 0, sizeof(gal::VertexP3T2));
 	vao.newVertexAttribute(0, 0, 3, GL_FLOAT, GL_FALSE, 0);
-	vao.newVertexAttribute(1, 1, 2, GL_FLOAT, GL_FALSE, 0);
+	vao.newVertexAttribute(1, 0, 2, GL_FLOAT, GL_FALSE, offsetof(gal::VertexP3T2, texCoords));
 
 	vao.bind();
 
@@ -94,7 +88,7 @@ int main()
 	// ============ Uniforms ============
 
 	shader.setUniform("texture1", 0);
-	shader.setUniform("transparentColor", glm::vec4(0.0f, 1.0f, 1.0f, 0.2f));
+	shader.setUniform("transparentColor", glm::vec4(0.4f, 0.7f, 0.7f, 1.0f));
 
 	// TODO: wrap this kind of stuff in an object class or transform struct?
 	glm::mat4 view = glm::mat4(1.0f);
@@ -118,12 +112,12 @@ int main()
 
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::rotate(model, static_cast<float>(glfwGetTime()), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, t, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		shader.setUniform("model", model);
 		shader.setUniform("t", t);
 
-		vao.drawNB(GL_TRIANGLES, 0, static_cast<GLsizei>(positions.size()));
+		vao.drawNB(GL_TRIANGLES, 0, static_cast<GLsizei>(vertices.size() * sizeof(float) / sizeof(gal::VertexP3T2)));
 
 		window.swapBuffers();  // Swap buffers. your update loop should end with this.
 	}

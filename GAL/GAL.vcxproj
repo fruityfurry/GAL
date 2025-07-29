@@ -34,7 +34,7 @@
     <ClInclude Include="detail\GALException.hpp" />
     <ClInclude Include="detail\ResourceTracker.hpp" />
     <ClInclude Include="detail\ShaderProgram.hpp" />
-    <ClInclude Include="detail\shapes.hpp" />
+    <ClInclude Include="shapes.hpp" />
     <ClInclude Include="detail\Texture.hpp" />
     <ClInclude Include="detail\types.hpp" />
     <ClInclude Include="detail\vertex.hpp" />

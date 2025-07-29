@@ -36,5 +36,11 @@
     <Image Include="resources\tar child.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="resources\container.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\tar_child.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

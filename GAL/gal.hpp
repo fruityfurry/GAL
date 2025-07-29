@@ -20,7 +20,6 @@
 #include "detail/keyboard.hpp"
 #include "detail/ResourceTracker.hpp"
 #include "detail/ShaderProgram.hpp"
-#include "detail/shapes.hpp"
 #include "detail/Texture.hpp"
 #include "detail/vertex.hpp"
 #include "detail/VertexArray.hpp"
