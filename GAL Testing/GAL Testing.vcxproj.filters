@@ -42,5 +42,14 @@
     <Image Include="resources\tar_child.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="resources\tiles.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\berdly.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\noelle.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

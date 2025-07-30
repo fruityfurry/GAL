@@ -54,7 +54,7 @@ int main()
 
 	// This funny looking syntax just unpacks the vertex data vector and index vector pair this functions gives us into two variables.
 	auto [vertexData, indices] = gal::shapes::generateCubeVertices(6, false, true);  // Generate cube subdivided 6 times, with tex coords.
-
+	
 	gal::Buffer vbo = gal::Buffer(gal::BufferType::Array);
 	vbo.allocateAndWrite(vertexData, gal::BufferUsageHint::StaticDraw);
 
@@ -84,7 +84,7 @@ int main()
 	stbi_set_flip_vertically_on_load(true);
 	int width, height, channels;
 
-	unsigned char* data = stbi_load("resources/pone.png", &width, &height, &channels, 0);
+	unsigned char* data = stbi_load("resources/noelle.png", &width, &height, &channels, 0);
 
 	tex.imageAB(0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, data, width, height);
 	stbi_image_free(data);
@@ -95,7 +95,8 @@ int main()
 	// ============ Uniforms ============
 
 	shader.setUniform("texture1", 0);
-	shader.setUniform("transparentColor", glm::vec4(0.4f, 0.7f, 0.7f, 1.0f));
+	shader.setUniform("hue", glm::vec4(0.4f, 0.7f, 0.7f, 1.0f));
+	shader.setUniform("hueStrength", 0.2f);
 
 	// TODO: wrap this kind of stuff in an object class or transform struct?
 	glm::mat4 view = glm::mat4(1.0f);
@@ -119,8 +120,8 @@ int main()
 
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::rotate(model, t, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, 1.4f * t, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, 0.5f * t, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, 0.7f * t, glm::vec3(1.0f, 0.0f, 0.0f));
 
 		shader.setUniform("model", model);
 		shader.setUniform("t", t);

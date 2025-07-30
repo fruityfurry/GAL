@@ -135,11 +135,14 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="resources\berdly.jpg" />
     <Image Include="resources\container.jpeg" />
     <Image Include="resources\container.jpg" />
+    <Image Include="resources\noelle.png" />
     <Image Include="resources\pone.png" />
     <Image Include="resources\tar child.jpg" />
     <Image Include="resources\tar_child.png" />
+    <Image Include="resources\tiles.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -117,7 +117,6 @@ namespace gal
 
 			if (generateNormals)
 				normals.reserve(vertexCount);
-
 			if (generateTexCoords)
 				texCoords.reserve(vertexCount);
 
