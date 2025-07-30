@@ -13,5 +13,5 @@ void main()
 	if (texColor.a == 0.0)
 		FragColor = transparentColor;
 	else
-		FragColor = texColor;
+		FragColor = texColor * vec4(fTexCoord, 1.0, 1.0);
 }

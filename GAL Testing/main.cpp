@@ -50,17 +50,24 @@ int main()
 
 	// ============ buffers ============
 
-	// generateCubeVertices outputs vertex data for the attributes you choose, in this case position and texture coordinates.
-	std::vector<float> vertices = gal::shapes::generateCubeVertices(6, false, true);
-
 	gal::VertexArray vao = gal::VertexArray();
 
-	gal::Buffer vbo = gal::Buffer(gal::BufferType::Array);
-	vbo.allocateAndWrite(vertices, gal::BufferUsageHint::StaticDraw);
+	// This funny looking syntax just unpacks the vertex data vector and index vector pair this functions gives us into two variables.
+	auto [vertexData, indices] = gal::shapes::generateCubeVertices(6, false, true);  // Generate cube subdivided 6 times, with tex coords.
 
+	gal::Buffer vbo = gal::Buffer(gal::BufferType::Array);
+	vbo.allocateAndWrite(vertexData, gal::BufferUsageHint::StaticDraw);
+
+	// You have to rely on knowing what attributes you picked to be generated and how they're ordered to do this.
+	// See the generateCubeVertices docstring for that information.
 	vao.bindVertexBuffer(vbo, 0, 0, sizeof(gal::VertexP3T2));
 	vao.newVertexAttribute(0, 0, 3, GL_FLOAT, GL_FALSE, 0);
 	vao.newVertexAttribute(1, 0, 2, GL_FLOAT, GL_FALSE, offsetof(gal::VertexP3T2, texCoords));
+
+	gal::Buffer ebo = gal::Buffer(gal::BufferType::ElementArray);
+	ebo.allocateAndWrite(indices, gal::BufferUsageHint::StaticDraw);
+
+	vao.bindElementBuffer(ebo, GL_UNSIGNED_INT);
 
 	vao.bind();
 
@@ -113,11 +120,13 @@ int main()
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::rotate(model, t, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, 1.4f * t, glm::vec3(1.0f, 0.0f, 0.0f));
 
 		shader.setUniform("model", model);
 		shader.setUniform("t", t);
 
-		vao.drawNB(GL_TRIANGLES, 0, static_cast<GLsizei>(vertices.size() * sizeof(float) / sizeof(gal::VertexP3T2)));
+		//vao.drawNB(GL_TRIANGLES, 0, static_cast<GLsizei>(vertexData.size() * sizeof(float) / sizeof(gal::VertexP3T2)));
+		vao.drawElementsNB(GL_TRIANGLES, 0, static_cast<GLsizei>(indices.size()));
 
 		window.swapBuffers();  // Swap buffers. your update loop should end with this.
 	}

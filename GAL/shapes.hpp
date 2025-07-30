@@ -2,15 +2,39 @@
 #define GAL_SHAPES_HPP
 
 #include <array>
+#include <unordered_map>
+#include <utility>
+
+namespace std
+{
+	template<std::size_t N>
+	struct hash<std::array<float, N>>
+	{
+		GAL_INLINE std::size_t operator()(const std::array<float, N>& arr) const
+		{
+			std::size_t seed = 0;
+
+			for (float val : arr)
+			{
+				int intCastVal;
+				memcpy(&intCastVal, &val, sizeof(float));
+				std::size_t hashVal = std::hash<int>{}(intCastVal);
+				seed ^= hashVal + 0x9e3779b9 + (seed << 6) + (seed >> 2);  // Apparently the Boost libraries do this.
+			}
+
+			return seed;
+		}
+	};
+}
 
 namespace gal
 {
 	namespace detail
 	{
 		GAL_INLINE std::vector<float> interleaveVertexAttributes(
-			std::vector<std::array<float, 3>>* positions,
-			std::vector<std::array<float, 3>>* normals,
-			std::vector<std::array<float, 2>>* texCoords
+			const std::vector<std::array<float, 3>>* positions,
+			const std::vector<std::array<float, 3>>* normals,
+			const std::vector<std::array<float, 2>>* texCoords
 		)
 		{
 			const size_t vertexCount = positions->size();
@@ -37,20 +61,51 @@ namespace gal
 			return result;
 		}
 
-		GAL_INLINE void deduplicateVertices()
+		template<int floatsPerVertex>
+		GAL_INLINE std::pair<std::vector<float>, std::vector<unsigned int>> deduplicateVertices(const std::vector<float>& vertexData)
 		{
+			if (vertexData.size() % floatsPerVertex != 0)
+				throw std::runtime_error("Incorrect number of vertex data points given the value of floatsPerVertex given. "
+					"This is an internal problem with GAL, not your fault!");
 
+			std::vector<float> vertexDataOut;
+			std::vector<unsigned int> indicesOut;
+			std::unordered_map<std::array<float, floatsPerVertex>, unsigned int> vertexMap;
+
+			unsigned int index = 0;
+
+			for (unsigned int i = 0; i < vertexData.size(); i += floatsPerVertex)
+			{
+				std::array<float, floatsPerVertex> vertex;
+
+				for (unsigned int j = 0; j < floatsPerVertex; ++j)
+					vertex[j] = std::round(vertexData[i + j] * 1e5f) / 1e5f;
+
+				if (auto it = vertexMap.find(vertex); it != vertexMap.end())
+					indicesOut.push_back(it->second);
+				else
+				{
+					vertexMap[vertex] = index;
+					indicesOut.push_back(index++);
+
+					for (float val : vertex)
+						vertexDataOut.push_back(val);
+				}
+			}
+
+			return { vertexDataOut, indicesOut };
 		}
 	}
 
 	namespace shapes
 	{
-		/// @brief Returns a vector of floats, which are the components of the chosen vertex attributes for a cube.
+		/// @brief Returns a pair of two vectors, the first one containing vertex data and the second containing indices.
 		/// Attributes will be in the order position, [normal, texCoords]. At least positions are always generated.
 		/// Subdivisions controls how many times the cube is subdivided, where a subdivision is in the sense of a
 		/// single halving slice across each axis. So, one subdivision would turn a regular cube into 4 regular cubes
 		/// stacked together.
-		GAL_INLINE std::vector<float> generateCubeVertices(int subdivisions, bool generateNormals = false, bool generateTexCoords = false)
+		GAL_INLINE std::pair<std::vector<float>, std::vector<unsigned int>> generateCubeVertices(
+			int subdivisions, bool generateNormals = false, bool generateTexCoords = false)
 		{
 			std::vector<std::array<float, 3>> positions;
 			std::vector<std::array<float, 3>> normals;
@@ -161,7 +216,30 @@ namespace gal
 			std::vector<std::array<float, 3>>* normalsPtr = generateNormals ? &normals : nullptr;
 			std::vector<std::array<float, 2>>* texCoordsPtr = generateTexCoords ? &texCoords : nullptr;
 
-			return detail::interleaveVertexAttributes(positionsPtr, normalsPtr, texCoordsPtr);
+			std::vector<float> duplicatedVertices = detail::interleaveVertexAttributes(positionsPtr, normalsPtr, texCoordsPtr);
+
+			size_t floatsPerVertex = 3;
+
+			if (generateNormals)
+				floatsPerVertex += 3;
+			if (generateTexCoords)
+				floatsPerVertex += 2;
+
+			switch (floatsPerVertex)
+			{
+				case 3:
+					return detail::deduplicateVertices<3>(duplicatedVertices);
+				case 5:
+					return detail::deduplicateVertices<5>(duplicatedVertices);
+				case 6:
+					return detail::deduplicateVertices<6>(duplicatedVertices);
+				case 8:
+					return detail::deduplicateVertices<8>(duplicatedVertices);
+
+				default:
+					throw std::runtime_error("Unsupported vertex format when deduplicating vertices. "
+						"This is an internal problem with GAL, not your fault!");
+			}
 		}
 	}
 }
