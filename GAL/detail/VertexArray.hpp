@@ -76,12 +76,35 @@ namespace gal
 			return *buffer;
 		}
 
+		/// @brief Get the type of the indices in the currently bound element buffer.
+		/// Throws if no element buffer has been bound.
 		GAL_NODISCARD GAL_INLINE GLenum getElementBufferIndexType() const
 		{
 			if (elementBuffer == nullptr)
 				detail::throwErr(ErrCode::GotNullBuffer, "Attempted to get the idnex type of a null element buffer.");
 
 			return elementBufferIndexType;
+		}
+
+		/// @brief Get the polygon mode set by setDrawSettings(). Throws if unset. 
+		GAL_NODISCARD GAL_INLINE GLenum getDrawPolygonMode() const
+		{
+			checkDrawSettingSet();
+			return drawPolygonMode;
+		}
+
+		/// @brief Get the offset/first value set by setDrawSettings(). Throws if unset. 
+		GAL_NODISCARD GAL_INLINE GLintptr getDrawOffsetFirst() const
+		{
+			checkDrawSettingSet();
+			return drawOffsetFirst;
+		}
+
+		/// @brief Get the polygon mode set by setDrawSettings(). Throws if unset. 
+		GAL_NODISCARD GAL_INLINE GLsizei getDrawCount() const
+		{
+			checkDrawSettingSet();
+			return drawCount;
 		}
 
 		/// @brief Bind a buffer to be this VAO's vertex buffer for the given index.
@@ -148,30 +171,66 @@ namespace gal
 
 		// TODO: Instanced draw and such.
 
+		/// @brief Set the settings that will be used for drawing when calling drawAB() or drawNB().
+		/// The offsetFirst parameter corresponds either to the indices parameter of glDDrawElements
+		/// or the first parameter of glDrawArrays.
+		GAL_INLINE void setDrawSettings(GLenum polygonMode, GLintptr offsetFirst, GLsizei count) noexcept
+		{
+			drawPolygonMode = polygonMode;
+			drawOffsetFirst = offsetFirst;
+			drawCount = count;
+
+			drawSettingsSet = true;
+		}
+
+		/// @brief Bind this VAO and draws it using the draw settings set by setDrawSettings(). Throws if unset.
+		/// Picks between glDrawArrays and glDrawElements depending on whether or not an element buffer is bound.
+		GAL_INLINE void drawAB() const
+		{
+			checkDrawSettingSet();
+
+			if (elementBuffer != nullptr)
+				drawElementsAB(drawPolygonMode, drawOffsetFirst, drawCount);
+			else
+				drawArraysAB(drawPolygonMode, static_cast<GLint>(drawOffsetFirst), drawCount);
+		}
+
+		/// @brief Draws this VAO using the draw settings set by setDrawSettings(). Throws if unset.
+		/// Picks between glDrawArrays and glDrawElements depending on whether or not an element buffer is bound.
+		GAL_INLINE void drawNB() const
+		{
+			checkDrawSettingSet();
+
+			if (elementBuffer != nullptr)
+				drawElementsNB(drawPolygonMode, drawOffsetFirst, drawCount);
+			else
+				drawArraysNB(drawPolygonMode, static_cast<GLint>(drawOffsetFirst), drawCount);
+		}
+
 		/// @brief Binds this VAO and draws it.
-		GAL_INLINE void drawAB(GLenum mode, GLint first, GLsizei count) const noexcept
+		GAL_INLINE void drawArraysAB(GLenum polygonMode, GLint first, GLsizei count) const noexcept
 		{
 			bind();
-			glDrawArrays(mode, first, count);
+			glDrawArrays(polygonMode, first, count);
 		}
 
 		/// @brief Draws this VAO.
-		GAL_INLINE void drawNB(GLenum mode, GLint first, GLsizei count) const noexcept
+		GAL_INLINE void drawArraysNB(GLenum polygonMode, GLint first, GLsizei count) const noexcept
 		{
-			glDrawArrays(mode, first, count);
+			glDrawArrays(polygonMode, first, count);
 		}
 
 		/// @brief Binds this VAO and draws it using its EBO.
-		GAL_INLINE void drawElementsAB(GLenum mode, GLintptr offset, GLsizei count) const noexcept
+		GAL_INLINE void drawElementsAB(GLenum polygonMode, GLintptr offset, GLsizei count) const noexcept
 		{
 			bind();
-			glDrawElements(mode, count, elementBufferIndexType, reinterpret_cast<void*>(offset));
+			glDrawElements(polygonMode, count, elementBufferIndexType, reinterpret_cast<void*>(offset));
 		}
 
 		/// @brief Draws this VAO using its EBO.
-		GAL_INLINE void drawElementsNB(GLenum mode, GLintptr offset, GLsizei count) const noexcept
+		GAL_INLINE void drawElementsNB(GLenum polygonMode, GLintptr offset, GLsizei count) const noexcept
 		{
-			glDrawElements(mode, count, elementBufferIndexType, reinterpret_cast<void*>(offset));
+			glDrawElements(polygonMode, count, elementBufferIndexType, reinterpret_cast<void*>(offset));
 		}
 
 	private:
@@ -179,6 +238,12 @@ namespace gal
 		std::vector<Buffer*> vertexBuffers{ detail::maxVertexAttribBindings, nullptr };
 		Buffer* elementBuffer = nullptr;
 		GLenum elementBufferIndexType = 0;
+
+		bool drawSettingsSet = false;
+
+		GLenum drawPolygonMode = 0;
+		GLintptr drawOffsetFirst = 0;
+		GLsizei drawCount = 0;
 
 		GAL_STATIC GAL_INLINE void checkBindingIndex(GLuint bindingIndex)
 		{
@@ -192,6 +257,13 @@ namespace gal
 			if (attributeIndex > detail::maxVertexAttribs - 1)
 				detail::throwErr(ErrCode::VertexAttributeIndexOutOfRange,
 					"Attempted to add a vertex attribute with an index that was out of range (> GL_MAX_VERTEX_ATTRIBS - 1).");
+		}
+
+		GAL_INLINE void checkDrawSettingSet() const
+		{
+			if (!drawSettingsSet)
+				detail::throwErr(ErrCode::DrawSettingsUnset,
+					"Attempted to perform an operation requiring VAO draw settings to be set, without them being set.");
 		}
 	};
 }

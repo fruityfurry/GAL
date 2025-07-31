@@ -7,18 +7,18 @@
 
 namespace std
 {
-	template<std::size_t N>
-	struct hash<std::array<float, N>>
+	template<size_t N>
+	struct hash<array<float, N>>
 	{
-		GAL_INLINE std::size_t operator()(const std::array<float, N>& arr) const
+		GAL_INLINE size_t operator()(const array<float, N>& arr) const
 		{
-			std::size_t seed = 0;
+			size_t seed = 0;
 
 			for (float val : arr)
 			{
 				int intCastVal;
 				memcpy(&intCastVal, &val, sizeof(float));
-				std::size_t hashVal = std::hash<int>{}(intCastVal);
+				size_t hashVal = hash<int>{}(intCastVal);
 				seed ^= hashVal + 0x9e3779b9 + (seed << 6) + (seed >> 2);  // Apparently the Boost libraries do this.
 			}
 

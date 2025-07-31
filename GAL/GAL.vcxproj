@@ -32,8 +32,11 @@
     <ClInclude Include="detail\keyboard.hpp" />
     <ClInclude Include="detail\logging.hpp" />
     <ClInclude Include="detail\GALException.hpp" />
+    <ClInclude Include="detail\MeshInstance.hpp" />
     <ClInclude Include="detail\ResourceTracker.hpp" />
+    <ClInclude Include="detail\Rotation.hpp" />
     <ClInclude Include="detail\ShaderProgram.hpp" />
+    <ClInclude Include="detail\Transform.hpp" />
     <ClInclude Include="shapes.hpp" />
     <ClInclude Include="detail\Texture.hpp" />
     <ClInclude Include="detail\types.hpp" />

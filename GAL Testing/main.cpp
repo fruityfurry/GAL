@@ -8,6 +8,8 @@
 static float t;
 static bool wireframe = false;
 
+// TODO: Camera class.
+
 static void processInput(gal::Window& window)
 {
 	using namespace gal::keyboard;
@@ -69,6 +71,8 @@ int main()
 
 	vao.bindElementBuffer(ebo, GL_UNSIGNED_INT);
 
+	// setDrawSettings sets the parameters to be passed to glDrawArrays/Elements() so they don't have to be repeated.
+	vao.setDrawSettings(GL_TRIANGLES, 0, static_cast<GLsizei>(indices.size()));
 	vao.bind();
 
 	// ============ Texture ============
@@ -98,7 +102,6 @@ int main()
 	shader.setUniform("hue", glm::vec4(0.4f, 0.7f, 0.7f, 1.0f));
 	shader.setUniform("hueStrength", 0.2f);
 
-	// TODO: wrap this kind of stuff in an object class or transform struct?
 	glm::mat4 view = glm::mat4(1.0f);
 	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
@@ -126,8 +129,7 @@ int main()
 		shader.setUniform("model", model);
 		shader.setUniform("t", t);
 
-		//vao.drawNB(GL_TRIANGLES, 0, static_cast<GLsizei>(vertexData.size() * sizeof(float) / sizeof(gal::VertexP3T2)));
-		vao.drawElementsNB(GL_TRIANGLES, 0, static_cast<GLsizei>(indices.size()));
+		vao.drawNB();
 
 		window.swapBuffers();  // Swap buffers. your update loop should end with this.
 	}

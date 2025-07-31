@@ -35,6 +35,7 @@ namespace gal
 		VertexBufferIndexOutOfRange, // Attempted to bind a vertex buffer to an index that was out of range (> GL_MAX_VERTEX_ATTRIB_BINDINGS).
 		VertexAttributeIndexOutOfRange, // Attempted to add a vertex attribute with an index that was out of range (> GL_MAX_VERTEX_ATTRIBS - 1).
 		GotNullBuffer, // Attempted to get a null buffer.
+		DrawSettingsUnset, // Attempted to do an operation with draw settings unset
 	};
 
     /// @brief Convert a GAL error code to a string.
@@ -66,6 +67,7 @@ namespace gal
 			case ErrCode::VertexBufferIndexOutOfRange: return "VertexBufferIndexOutOfRange";
 			case ErrCode::VertexAttributeIndexOutOfRange: return "VertexAttributeIndexOutOfRange";
 			case ErrCode::GotNullBuffer: return "GotNullBuffer";
+			case ErrCode::DrawSettingsUnset: return "DrawSettingsUnset";
 
 			default: return "Unknown";
 		}

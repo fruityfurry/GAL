@@ -77,5 +77,14 @@
     <ClInclude Include="shapes.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="detail\Transform.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="detail\Rotation.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="detail\MeshInstance.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
