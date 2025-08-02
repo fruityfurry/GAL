@@ -53,13 +53,13 @@ static void processInput(gal::Window& window)
 		camera.moveLocal(glm::vec3(0.0f, -cameraMoveSpeed * dt, 0.0f));
 
 	if (isKeyDown(GLFW_KEY_UP))
-		camera.rotate(gal::Rotation(camera.getRight(), cameraRotateSpeed * dt));
+		camera.rotateGlobal(gal::Rotation(camera.getRight(), cameraRotateSpeed * dt));
 	if (isKeyDown(GLFW_KEY_LEFT))
-		camera.rotate(gal::Rotation(camera.getUp(), cameraRotateSpeed * dt));
+		camera.rotateGlobal(gal::Rotation(glm::vec3(0.0f, 1.0f, 0.0f), cameraRotateSpeed * dt));
 	if (isKeyDown(GLFW_KEY_DOWN))
-		camera.rotate(gal::Rotation(camera.getRight(), -cameraRotateSpeed * dt));
+		camera.rotateGlobal(gal::Rotation(camera.getRight(), -cameraRotateSpeed * dt));
 	if (isKeyDown(GLFW_KEY_RIGHT))
-		camera.rotate(gal::Rotation(camera.getUp(), -cameraRotateSpeed * dt));
+		camera.rotateGlobal(gal::Rotation(glm::vec3(0.0f, 1.0f, 0.0f), -cameraRotateSpeed * dt));
 }
 
 int main()
@@ -109,9 +109,10 @@ int main()
 	
 	gal::MeshInstance instances[] =
 	{
-		{ vao, gal::Transform({ 0.0f, 1.0f, -1.0f }, gal::Rotation(glm::vec3(1.0f, 0.3f, 0.0f)), { 1.0f, 0.3f, 1.0f })},
+		/*{ vao, gal::Transform({ 0.0f, 1.0f, -1.0f }, gal::Rotation(glm::vec3(1.0f, 0.3f, 0.0f)), { 1.0f, 0.3f, 1.0f })},
 		{ vao, gal::Transform({ -1.0f, 0.0f, -1.0f }, gal::Rotation(glm::vec3(1.0f, 0.3f, 2.0f)), { 1.0f, 1.3f, 1.0f }) },
-		{ vao, gal::Transform({ 1.0f, 1.0f, -2.0f }, gal::Rotation(glm::vec3(0.2f, 1.2f, 0.4f)), { 1.6f, 1.6f, 1.6f }) }
+		{ vao, gal::Transform({ 1.0f, 1.0f, -2.0f }, gal::Rotation(glm::vec3(0.2f, 1.2f, 0.4f)), { 1.6f, 1.6f, 1.6f }) },*/
+		{ vao, gal::Transform({ 0.0f, 0.0f, -3.0f })}
 	};
 
 	// ============ Texture ============

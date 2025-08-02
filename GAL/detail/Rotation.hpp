@@ -47,15 +47,15 @@ namespace gal
 			set(axis, angle);
 		}
 
-		/// @brief Follow this rotation with another, storing the result in this object.
-		GAL_INLINE void followWith(const Rotation& delta) noexcept { quat = glm::normalize(delta.quat * quat); }
-		/// @brief Precede this rotation with another, storing the result in this object.
-		GAL_INLINE void precedeWith(const Rotation& delta) noexcept { quat = glm::normalize(quat * delta.quat); }
+		/// @brief Rotate in the local space, storing the result in this object.
+		GAL_INLINE void rotateLocal(const Rotation& delta) noexcept { quat = glm::normalize(quat * delta.quat); }
+		/// @brief Rotate in the global space, storing the result in this object.
+		GAL_INLINE void rotateGlobal(const Rotation& delta) noexcept { quat = glm::normalize(delta.quat * quat); }
 
-		/// @brief Get this rotation followed by another.
-		GAL_NODISCARD GAL_INLINE Rotation followedWith(const Rotation& delta) const noexcept { return glm::normalize(delta.quat * quat); }
-		/// @brief Get this rotation preceded by another.
-		GAL_NODISCARD GAL_INLINE Rotation precededWith(const Rotation& delta) const noexcept { return glm::normalize(quat * delta.quat); }
+		/// @brief Get this rotation rotated in the local space.
+		GAL_NODISCARD GAL_INLINE Rotation rotatedLocal(const Rotation& delta) const noexcept { return glm::normalize(quat * delta.quat); }
+		/// @brief Get this rotation rotated in the global space.
+		GAL_NODISCARD GAL_INLINE Rotation rotatedGlobal(const Rotation& delta) const noexcept { return glm::normalize(delta.quat * quat); }
 
 		GAL_NODISCARD GAL_INLINE Rotation inverse() const noexcept { return Rotation(glm::conjugate(quat)); }
 		GAL_NODISCARD GAL_INLINE Rotation conjugate() const noexcept { return Rotation(glm::conjugate(quat)); }
