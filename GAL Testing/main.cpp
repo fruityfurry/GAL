@@ -113,13 +113,14 @@ int main()
 
 	while (!window.shouldClose())
 	{
-		window.pollEvents();  // Poll for window events (keypresses, window resizing, etc.).
-							  // Your update loop should start with this.
+		window.pollEvents();   // Poll for window events (keypresses, window resizing, etc.).
+		window.updateState();  // Update internal frame-by-frame state.
+							   // Your update loop should start with these two function calls.
 		processInput(window);
 
 		window.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		t = static_cast<float>(glfwGetTime());
+		t = gal::getTime<float>();
 
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));

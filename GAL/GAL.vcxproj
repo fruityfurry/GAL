@@ -24,6 +24,7 @@
   <ItemGroup>
     <ClInclude Include="detail\attributes.hpp" />
     <ClInclude Include="detail\Buffer.hpp" />
+    <ClInclude Include="detail\Camera.hpp" />
     <ClInclude Include="detail\debug.hpp" />
     <ClInclude Include="detail\enums.hpp" />
     <ClInclude Include="detail\glmIncludes.hpp" />
@@ -36,6 +37,7 @@
     <ClInclude Include="detail\ResourceTracker.hpp" />
     <ClInclude Include="detail\Rotation.hpp" />
     <ClInclude Include="detail\ShaderProgram.hpp" />
+    <ClInclude Include="detail\state.hpp" />
     <ClInclude Include="detail\Transform.hpp" />
     <ClInclude Include="shapes.hpp" />
     <ClInclude Include="detail\Texture.hpp" />

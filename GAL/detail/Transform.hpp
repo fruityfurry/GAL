@@ -33,7 +33,7 @@ namespace gal
 		}
  
 		GAL_INLINE void applyTranslation(const glm::vec3& delta) { position += delta; }
-		GAL_INLINE void applyRotation(const Rotation& rotation) { this->rotation.add(rotation); }
+		GAL_INLINE void applyRotation(const Rotation& rotation) { this->rotation.followWith(rotation); }
 		GAL_INLINE void applyScale(const glm::vec3& scaleFactors) { scale *= scaleFactors; }
 
 		/// @brief Get the model matrix represented by this object. 

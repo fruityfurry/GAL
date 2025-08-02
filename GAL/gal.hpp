@@ -12,6 +12,7 @@
 #endif
 
 #include "detail/Buffer.hpp"
+#include "detail/Camera.hpp"
 #include "detail/debug.hpp"
 #include "detail/enums.hpp"
 #include "detail/GALException.hpp"
@@ -21,6 +22,7 @@
 #include "detail/MeshInstance.hpp"
 #include "detail/ResourceTracker.hpp"
 #include "detail/ShaderProgram.hpp"
+#include "detail/state.hpp"
 #include "detail/Texture.hpp"
 #include "detail/Transform.hpp"
 #include "detail/vertex.hpp"

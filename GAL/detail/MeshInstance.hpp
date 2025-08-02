@@ -15,7 +15,7 @@ namespace gal
 
 		/// @brief Initialize a mesh instance with the default transform. 
 		GAL_INLINE MeshInstance(const VertexArray& vao)
-			: vao(vao), transform(Transform()) { }
+			: vao(vao), transform() { }
 
 		/// @brief Initialize a mesh instance with a given transform.
 		GAL_INLINE MeshInstance(const VertexArray& vao, const Transform& transform)

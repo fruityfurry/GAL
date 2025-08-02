@@ -38,7 +38,7 @@ namespace gal
 	namespace keyboard
 	{
 		/// @brief Returns true once when a key is first pressed.
-		/// Remember to call pollEvents() to keep the internal key states updated.
+		/// Remember to call Window::updateState() to keep the internal key states updated.
 		GAL_NODISCARD GAL_INLINE bool isKeyPressed(int key)
 		{
 			if (!detail::isValidKey(key))
@@ -48,7 +48,7 @@ namespace gal
 		}
 
 		/// @brief Returns true once when a key is first released.
-		/// Remember to call pollEvents() to keep the internal key states updated.
+		/// Remember to call Window::updateState() to keep the internal key states updated.
 		GAL_NODISCARD GAL_INLINE bool isKeyReleased(int key)
 		{
 			if (!detail::isValidKey(key))
@@ -58,7 +58,7 @@ namespace gal
 		}
 
 		/// @brief Returns true if the key is currently held down.
-		/// Remember to call pollEvents() to keep the internal key states updated.
+		/// Remember to call Window::updateState() to keep the internal key states updated.
 		GAL_NODISCARD GAL_INLINE bool isKeyDown(int key)
 		{
 			if (!detail::isValidKey(key))
@@ -68,7 +68,7 @@ namespace gal
 		}
 
 		/// @brief Returns true if the key is not currently held.
-		/// Remember to call pollEvents() to keep the internal key states updated.
+		/// Remember to call Window::updateState() to keep the internal key states updated.
 		GAL_NODISCARD GAL_INLINE bool isKeyUp(int key)
 		{
 			if (!detail::isValidKey(key))

@@ -3,6 +3,7 @@
 
 #include "attributes.hpp"
 #include "GALException.hpp"
+#include "state.hpp"
 namespace gal::detail
 {
 	void updateKeyStates(GLFWwindow*);
@@ -101,8 +102,6 @@ namespace gal
 				glfwSetFramebufferSizeCallback(window, defaultResizeCallback);
 			if (vsync)
 				glfwSwapInterval(1);
-
-			NDCMatrix = calculateNDCMatrix(width, height);
 		}
 
 		// Forbid copying.
@@ -130,12 +129,14 @@ namespace gal
 			this->height = height;
 		}
 
-		/// @brief Poll for window events and keep internal keystates updated.
-		/// This should be called at the beginning of your update loop. 
-		GAL_INLINE void pollEvents() const noexcept
+		/// @brief Poll events (keypresses, window resizing, etc.). Call this at the beginning of your update loop. 
+		GAL_INLINE void pollEvents() const noexcept { glfwPollEvents(); }
+
+		/// @brief Keep internal frame-to-frame state updated. Call this just after pollEvents().
+		GAL_INLINE void updateState() const noexcept
 		{
-			glfwPollEvents();
 			detail::updateKeyStates(window);
+			detail::updateState();
 		}
 
 		GAL_NODISCARD GAL_INLINE bool shouldClose() const noexcept { return glfwWindowShouldClose(window); }
@@ -155,68 +156,23 @@ namespace gal
 			glPolygonMode(GL_FRONT_AND_BACK, static_cast<GLenum>(mode));
 		}
 
-		GAL_INLINE void setCacheNDCMatrix(bool val) noexcept
-		{
-			cacheNDCMatrix = val;
-		}
-
-		/// @brief Recalculate the screenspace to NDC conversion matrix. You only need to call this if you
-		/// called setCacheNDCMatrix(false).
-		GAL_NODISCARD GAL_INLINE void calculateNDCMatrix() noexcept
-		{
-			glm::mat4 mat(1.0f);
-			mat = glm::translate(mat, { -1.0f, 1.0f, 0.0f });
-			mat = glm::scale(mat, { 2.0f / width, -2.0f / height, 1.0f });
-
-			NDCMatrix = mat;
-		}
-
-		/// @brief Get the matrix used to convert screenspace coordinates to Normalized Device Coordinates. 
-		GAL_NODISCARD GAL_INLINE glm::mat4 getScreenspaceToNDCMatrix() const noexcept
-		{
-			return NDCMatrix;
-		}
-
-		/// @brief Convert a set of screenspace coordinates to Normalized Device Coordinates for use with OpenGL.
-		/// This uses a cached conversion matrix (unless you called setCacheNDCMatrix(false)), so don't worry about
-		/// recalculating the matrix every call.
-		GAL_NODISCARD GAL_INLINE glm::vec2 screenspaceToNDC(const glm::vec2& vec) const noexcept
-		{
-			const glm::vec4 NDCCoords = NDCMatrix * glm::vec4(vec.x, vec.y, 0.0f, 1.0f);
-			return glm::vec2(NDCCoords.x, NDCCoords.y);
-		}
-
 		/// @brief Call this at the start of any custom resize callbacks, or the internal state of the window will not be kept up-to-date.
 		GAL_STATIC GAL_INLINE void resizeUpdate(GLFWwindow* glfwWindow, int width, int height)
 		{
 			void* userPtr = glfwGetWindowUserPointer(glfwWindow);
 			if (userPtr == nullptr)
-				detail::throwErr(ErrCode::UserPointerNull, "The user pointer used to update gal::Window state was null.");
+				throw std::runtime_error("The user pointer used to update gal::Window state was null. "
+					"This is an internal problem with GAL, not your fault!");
 
 			Window* window = static_cast<Window*>(userPtr);
 			window->width = width;
 			window->height = height;
-
-			if (window->cacheNDCMatrix)
-				window->NDCMatrix = calculateNDCMatrix(width, height);
 		}
 
 	private:
 		GLFWwindow* window;
 		int width;
 		int height;
-
-		glm::mat4 NDCMatrix;
-		bool cacheNDCMatrix = true;
-
-		GAL_NODISCARD GAL_STATIC GAL_INLINE glm::mat4 calculateNDCMatrix(int width, int height) noexcept
-		{
-			glm::mat4 mat(1.0f);
-			mat = glm::translate(mat, { -1.0f, 1.0f, 0.0f });
-			mat = glm::scale(mat, { 2.0f / width, -2.0f / height, 1.0f });
-
-			return mat;
-		}
 
 		GAL_STATIC GAL_INLINE void defaultResizeCallback(GLFWwindow* glfwWindow, int width, int height)
 		{
