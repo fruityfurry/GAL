@@ -109,10 +109,10 @@ int main()
 	
 	gal::MeshInstance instances[] =
 	{
-		/*{ vao, gal::Transform({ 0.0f, 1.0f, -1.0f }, gal::Rotation(glm::vec3(1.0f, 0.3f, 0.0f)), { 1.0f, 0.3f, 1.0f })},
-		{ vao, gal::Transform({ -1.0f, 0.0f, -1.0f }, gal::Rotation(glm::vec3(1.0f, 0.3f, 2.0f)), { 1.0f, 1.3f, 1.0f }) },
-		{ vao, gal::Transform({ 1.0f, 1.0f, -2.0f }, gal::Rotation(glm::vec3(0.2f, 1.2f, 0.4f)), { 1.6f, 1.6f, 1.6f }) },*/
-		{ vao, gal::Transform({ 0.0f, 0.0f, -3.0f })}
+		{ vao, gal::Transform({ 0.0f, 1.8f, -1.0f }, gal::Rotation(glm::vec3(1.0f, 0.3f, 0.0f)), { 0.5f, 0.3f, 0.5f })},
+		{ vao, gal::Transform({ -1.0f, 1.8f, -2.0f }, gal::Rotation(glm::vec3(1.0f, 0.3f, 2.0f)), { 0.3f, 0.5f, 0.3f }) },
+		{ vao, gal::Transform({ 1.0f, 1.0f, -4.0f }, gal::Rotation(glm::vec3(0.2f, 1.2f, 0.4f)), { 1.2f, 1.2f, 1.2f }) },
+		{ vao, gal::Transform({ 0.0f, 0.0f, -1.0f }) }
 	};
 
 	// ============ Texture ============

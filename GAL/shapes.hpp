@@ -126,13 +126,14 @@ namespace gal
 			for (float u = -1.0f; u < 1.0f; u += step)
 				for (float v = -1.0f; v < 1.0f; v += step)
 				{
-					const float texU = (u + 1.0f) / 2.0f;
-					const float texV = (v + 1.0f) / 2.0f;
-
 					// Vertices are added in BL, BR, TL - BR, TR, TL order.
 
 					if (generateTexCoords)
-						for (int n = 0; n < 6; ++n)  // Tex coords are identical for all six faces.
+					{
+						const float texU = (u + 1.0f) / 2.0f;
+						const float texV = (v + 1.0f) / 2.0f;
+
+						for (int n = 0; n < 6; ++n)
 						{
 							texCoords.push_back({ texU,           texV });
 							texCoords.push_back({ texU + texStep, texV });
@@ -142,6 +143,7 @@ namespace gal
 							texCoords.push_back({ texU + texStep, texV + texStep });
 							texCoords.push_back({ texU,           texV + texStep });
 						}
+					}
 
 					// X faces.
 					positions.push_back({ -1.0f, u,        v });

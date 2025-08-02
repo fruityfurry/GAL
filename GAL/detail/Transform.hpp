@@ -40,9 +40,12 @@ namespace gal
 		GAL_INLINE void setRotation(const Rotation& rotation) noexcept { this->rotation = rotation; dirty = true; }
 		GAL_INLINE void setScale(const glm::vec3& scale) noexcept { this->scale = scale; dirty = true; }
  
-		GAL_INLINE void applyTranslation(const glm::vec3& delta) noexcept { position += delta; dirty = true; }
-		GAL_INLINE void applyRotation(const Rotation& rotation) noexcept { this->rotation.rotateLocal(rotation); dirty = true; }
+		GAL_INLINE void applyTranslationGlobal(const glm::vec3& delta) noexcept { position += delta; dirty = true; }
+		GAL_INLINE void applyRotationGlobal(const Rotation& rotation) noexcept { this->rotation.rotateGlobal(rotation); dirty = true; }
 		GAL_INLINE void applyScale(const glm::vec3& scaleFactors) noexcept { scale *= scaleFactors; dirty = true; }
+
+		GAL_INLINE void applyTranslationLocal(const glm::vec3& delta) noexcept { position += rotation.rotate(delta); dirty = true; }
+		GAL_INLINE void applyRotationLocal(const Rotation& rotation) noexcept { this->rotation.rotateLocal(rotation); dirty = true; }
 
 		GAL_NODISCARD GAL_INLINE glm::vec3 getPosition() const noexcept { return position; }
 		GAL_NODISCARD GAL_INLINE Rotation getRotation() const noexcept { return rotation; }
@@ -70,13 +73,9 @@ namespace gal
 
 		GAL_INLINE glm::mat4 calculateModelMatrix() const noexcept
 		{
-			glm::mat4 model = glm::mat4(1.0f);
-
-			model = glm::scale(model, scale);
-			model = rotation.asMat4() * model;
-			model = glm::translate(model, position);
-
-			return model;
+			return glm::translate(glm::mat4(1.0f), position)
+				* rotation.asMat4()
+				* glm::scale(glm::mat4(1.0f), scale);
 		}
 	};
 }
