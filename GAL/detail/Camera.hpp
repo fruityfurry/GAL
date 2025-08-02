@@ -25,7 +25,7 @@ namespace gal
 
 		GAL_INLINE glm::mat4 getViewMatrix() const noexcept
 		{
-			const glm::mat4 rotationMatrix = rotation.asMat4();
+			const glm::mat4 rotationMatrix = rotation.inverse().asMat4();
 			const glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), -position);
 
 			return rotationMatrix * translationMatrix;

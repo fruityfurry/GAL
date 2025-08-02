@@ -31,7 +31,7 @@ namespace gal
 
 		/// @brief Set rotation.
 		GAL_INLINE void set(const Rotation& rotation) noexcept { quat = rotation.quat; }
-		GAL_INLINE void set(const glm::quat& rotationQuat) noexcept { quat = rotationQuat; }
+		GAL_INLINE void set(const glm::quat& rotationQuat) noexcept { quat = glm::normalize(rotationQuat); }
 		GAL_INLINE void set(const glm::vec3& eulerAngles) noexcept { quat = glm::quat(eulerAngles); }
 		GAL_INLINE void set(const glm::vec3& axis, float angle) noexcept { quat = glm::angleAxis(angle, axis); }
 		GAL_INLINE void set(const glm::mat4& rotationMat) noexcept { quat = glm::quat(rotationMat); }
@@ -57,7 +57,7 @@ namespace gal
 		/// @brief Get this rotation preceded by another.
 		GAL_NODISCARD GAL_INLINE Rotation precededWith(const Rotation& delta) const noexcept { return glm::normalize(quat * delta.quat); }
 
-		GAL_NODISCARD GAL_INLINE Rotation inverse() const noexcept { return Rotation(glm::inverse(quat)); }
+		GAL_NODISCARD GAL_INLINE Rotation inverse() const noexcept { return Rotation(glm::conjugate(quat)); }
 		GAL_NODISCARD GAL_INLINE Rotation conjugate() const noexcept { return Rotation(glm::conjugate(quat)); }
 
 		GAL_NODISCARD GAL_INLINE glm::quat asQuat() const noexcept { return quat; }

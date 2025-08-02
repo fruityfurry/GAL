@@ -4,8 +4,6 @@ layout (location = 1) in vec2 vTexCoord;
 
 out vec2 fTexCoord;
 
-uniform float t;
-
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
@@ -13,6 +11,6 @@ uniform mat4 projection;
 void main()
 {
 	vec3 newPos = normalize(pos);
-	gl_Position = projection * view * model * vec4(newPos, 1.0) + vec4(sin(2.0 * t), 0.0, 0.0, 1.0);
+	gl_Position = projection * view * model * vec4(newPos, 1.0);
 	fTexCoord = vTexCoord;
 }

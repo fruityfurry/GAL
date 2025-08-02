@@ -3,6 +3,8 @@
 
 #include "Rotation.hpp"
 
+// TODO: maybe model matrix caching? would be kind of annoying for caller though...
+
 namespace gal
 {
 	struct Transform

@@ -154,49 +154,49 @@ namespace gal
 
 		// ========== float uniform setters ==========
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, float val) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, float val) const
 		{
 			glProgramUniform1f(programID, getUniformLocation(name), val);
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::vec1& vec) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::vec1& vec) const
 		{
 			glProgramUniform1fv(programID, getUniformLocation(name), 1, glm::value_ptr(vec));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, float val1, float val2) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, float val1, float val2) const
 		{
 			glProgramUniform2f(programID, getUniformLocation(name), val1, val2);
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::vec2& vec) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::vec2& vec) const
 		{
 			glProgramUniform2fv(programID, getUniformLocation(name), 1, glm::value_ptr(vec));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, float val1, float val2, float val3) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, float val1, float val2, float val3) const
 		{
 			glProgramUniform3f(programID, getUniformLocation(name), val1, val2, val3);
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::vec3& vec) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::vec3& vec) const
 		{
 			glProgramUniform3fv(programID, getUniformLocation(name), 1, glm::value_ptr(vec));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, float val1, float val2, float val3, float val4) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, float val1, float val2, float val3, float val4) const
 		{
 			glProgramUniform4f(programID, getUniformLocation(name), val1, val2, val3, val4);
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::vec4& vec) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::vec4& vec) const
 		{
 			glProgramUniform4fv(programID, getUniformLocation(name), 1, glm::value_ptr(vec));
 			return *this;
@@ -204,55 +204,55 @@ namespace gal
 
 		// ========== int uniform setters ==========
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, bool val) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, bool val) const
 		{
 			glProgramUniform1i(programID, getUniformLocation(name), static_cast<int>(val));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, int val) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, int val) const
 		{
 			glProgramUniform1i(programID, getUniformLocation(name), val);
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::ivec1& vec) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::ivec1& vec) const
 		{
 			glProgramUniform1iv(programID, getUniformLocation(name), 1, glm::value_ptr(vec));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, int val1, int val2) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, int val1, int val2) const
 		{
 			glProgramUniform2i(programID, getUniformLocation(name), val1, val2);
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::ivec2& vec) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::ivec2& vec) const
 		{
 			glProgramUniform2iv(programID, getUniformLocation(name), 1, glm::value_ptr(vec));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, int val1, int val2, int val3) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, int val1, int val2, int val3) const
 		{
 			glProgramUniform3i(programID, getUniformLocation(name), val1, val2, val3);
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::ivec3& vec) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::ivec3& vec) const
 		{
 			glProgramUniform3iv(programID, getUniformLocation(name), 1, glm::value_ptr(vec));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, int val1, int val2, int val3, int val4) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, int val1, int val2, int val3, int val4) const
 		{
 			glProgramUniform4i(programID, getUniformLocation(name), val1, val2, val3, val4);
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::ivec4& vec) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::ivec4& vec) const
 		{
 			glProgramUniform4iv(programID, getUniformLocation(name), 1, glm::value_ptr(vec));
 			return *this;
@@ -260,49 +260,49 @@ namespace gal
 
 		// ========== uint uniform setters ==========
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, unsigned int val) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, unsigned int val) const
 		{
 			glProgramUniform1ui(programID, getUniformLocation(name), val);
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::uvec1& vec) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::uvec1& vec) const
 		{
 			glProgramUniform1uiv(programID, getUniformLocation(name), 1, glm::value_ptr(vec));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, unsigned int val1, unsigned int val2) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, unsigned int val1, unsigned int val2) const
 		{
 			glProgramUniform2ui(programID, getUniformLocation(name), val1, val2);
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::uvec2& vec) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::uvec2& vec) const
 		{
 			glProgramUniform2uiv(programID, getUniformLocation(name), 1, glm::value_ptr(vec));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, unsigned int val1, unsigned int val2, unsigned int val3) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, unsigned int val1, unsigned int val2, unsigned int val3) const
 		{
 			glProgramUniform3ui(programID, getUniformLocation(name), val1, val2, val3);
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::uvec3& vec) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::uvec3& vec) const
 		{
 			glProgramUniform3uiv(programID, getUniformLocation(name), 1, glm::value_ptr(vec));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, unsigned int val1, unsigned int val2, unsigned int val3, unsigned int val4) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, unsigned int val1, unsigned int val2, unsigned int val3, unsigned int val4) const
 		{
 			glProgramUniform4ui(programID, getUniformLocation(name), val1, val2, val3, val4);
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::uvec4& vec) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::uvec4& vec) const
 		{
 			glProgramUniform4uiv(programID, getUniformLocation(name), 1, glm::value_ptr(vec));
 			return *this;
@@ -311,55 +311,55 @@ namespace gal
 
 		// ========== matrix uniform setters ==========
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat2& mat, bool transpose = false) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat2& mat, bool transpose = false) const
 		{
 			glProgramUniformMatrix2fv(programID, getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(mat));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat3& mat, bool transpose = false) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat3& mat, bool transpose = false) const
 		{
 			glProgramUniformMatrix3fv(programID, getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(mat));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat4& mat, bool transpose = false) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat4& mat, bool transpose = false) const
 		{
 			glProgramUniformMatrix4fv(programID, getUniformLocation(name), 1, transpose, glm::value_ptr(mat));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat2x3& mat, bool transpose = false) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat2x3& mat, bool transpose = false) const
 		{
 			glProgramUniformMatrix2x3fv(programID, getUniformLocation(name), 1, transpose, glm::value_ptr(mat));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat3x2& mat, bool transpose = false) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat3x2& mat, bool transpose = false) const
 		{
 			glProgramUniformMatrix3x2fv(programID, getUniformLocation(name), 1, transpose, glm::value_ptr(mat));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat2x4& mat, bool transpose = false) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat2x4& mat, bool transpose = false) const
 		{
 			glProgramUniformMatrix2x4fv(programID, getUniformLocation(name), 1, transpose, glm::value_ptr(mat));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat4x2& mat, bool transpose = false) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat4x2& mat, bool transpose = false) const
 		{
 			glProgramUniformMatrix4x2fv(programID, getUniformLocation(name), 1, transpose, glm::value_ptr(mat));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat3x4& mat, bool transpose = false) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat3x4& mat, bool transpose = false) const
 		{
 			glProgramUniformMatrix3x4fv(programID, getUniformLocation(name), 1, transpose, glm::value_ptr(mat));
 			return *this;
 		}
 
-		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat4x3& mat, bool transpose = false) const noexcept
+		GAL_INLINE const ShaderProgram& setUniform(const std::string& name, const glm::mat4x3& mat, bool transpose = false) const
 		{
 			glProgramUniformMatrix4x3fv(programID, getUniformLocation(name), 1, transpose, glm::value_ptr(mat));
 			return *this;

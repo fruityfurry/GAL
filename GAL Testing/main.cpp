@@ -5,16 +5,20 @@
 
 #include "stb_image.h"
 
+static gal::Camera camera = gal::Camera(glm::vec3(0.0f, 0.0f, 3.0f));
+static constexpr float cameraMoveSpeed = 3.0f;
+static constexpr float cameraRotateSpeed = 2.0f;
+
 static float t;
 static bool wireframe = false;
-
-// TODO: Camera class.
 
 static void processInput(gal::Window& window)
 {
 	using namespace gal::keyboard;
 
-	// Can use regular glfw callback too.
+	// ============ Keypresses ============
+
+	// Can use regular glfw callback too if you wish.
 	if (isKeyPressed(GLFW_KEY_ESCAPE))
 		window.setShouldClose(true);
 
@@ -30,6 +34,32 @@ static void processInput(gal::Window& window)
 		else
 			window.setPolygonMode(gal::PolygonMode::Fill);
 	}
+
+	// ============ Keydowns ============
+
+	const float dt = gal::getDeltaTime<float>();
+
+	if (isKeyDown(GLFW_KEY_W))
+		camera.moveLocal(glm::vec3(0.0f, 0.0f, cameraMoveSpeed * dt));
+	if (isKeyDown(GLFW_KEY_A))
+		camera.moveLocal(glm::vec3(-cameraMoveSpeed * dt, 0.0f, 0.0f));
+	if (isKeyDown(GLFW_KEY_S))
+		camera.moveLocal(glm::vec3(0.0f, 0.0f, -cameraMoveSpeed * dt));
+	if (isKeyDown(GLFW_KEY_D))
+		camera.moveLocal(glm::vec3(cameraMoveSpeed * dt, 0.0f, 0.0f));
+	if (isKeyDown(GLFW_KEY_LEFT_SHIFT))
+		camera.moveLocal(glm::vec3(0.0f, cameraMoveSpeed * dt, 0.0f));
+	if (isKeyDown(GLFW_KEY_LEFT_CONTROL))
+		camera.moveLocal(glm::vec3(0.0f, -cameraMoveSpeed * dt, 0.0f));
+
+	if (isKeyDown(GLFW_KEY_UP))
+		camera.rotate(gal::Rotation(camera.getRight(), cameraRotateSpeed * dt));
+	if (isKeyDown(GLFW_KEY_LEFT))
+		camera.rotate(gal::Rotation(camera.getUp(), cameraRotateSpeed * dt));
+	if (isKeyDown(GLFW_KEY_DOWN))
+		camera.rotate(gal::Rotation(camera.getRight(), -cameraRotateSpeed * dt));
+	if (isKeyDown(GLFW_KEY_RIGHT))
+		camera.rotate(gal::Rotation(camera.getUp(), -cameraRotateSpeed * dt));
 }
 
 int main()
@@ -75,6 +105,15 @@ int main()
 	vao.setDrawSettings(GL_TRIANGLES, 0, static_cast<GLsizei>(indices.size()));
 	vao.bind();
 
+	// ============ Mesh Instances ============
+	
+	gal::MeshInstance instances[] =
+	{
+		{ vao, gal::Transform({ 0.0f, 1.0f, -1.0f }, gal::Rotation(glm::vec3(1.0f, 0.3f, 0.0f)), { 1.0f, 0.3f, 1.0f })},
+		{ vao, gal::Transform({ -1.0f, 0.0f, -1.0f }, gal::Rotation(glm::vec3(1.0f, 0.3f, 2.0f)), { 1.0f, 1.3f, 1.0f }) },
+		{ vao, gal::Transform({ 1.0f, 1.0f, -2.0f }, gal::Rotation(glm::vec3(0.2f, 1.2f, 0.4f)), { 1.6f, 1.6f, 1.6f }) }
+	};
+
 	// ============ Texture ============
 
 	gal::Texture tex = gal::Texture(gal::TextureType::TwoD);
@@ -102,13 +141,9 @@ int main()
 	shader.setUniform("hue", glm::vec4(0.4f, 0.7f, 0.7f, 1.0f));
 	shader.setUniform("hueStrength", 0.2f);
 
-	glm::mat4 view = glm::mat4(1.0f);
-	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 
-	shader.setUniform("view", view);
 	shader.setUniform("projection", projection);
 
 	while (!window.shouldClose())
@@ -119,16 +154,11 @@ int main()
 		processInput(window);
 
 		window.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
+		shader.setUniform("view", camera.getViewMatrix());
 
-		t = gal::getTime<float>();
-
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::rotate(model, 0.5f * t, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, 0.7f * t, glm::vec3(1.0f, 0.0f, 0.0f));
-
-		shader.setUniform("model", model);
-		shader.setUniform("t", t);
+		for (auto& instance : instances)
+			instance.drawNB(shader, "model");
 
 		vao.drawNB();
 
