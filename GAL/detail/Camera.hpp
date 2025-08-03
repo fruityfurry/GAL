@@ -20,17 +20,6 @@ namespace gal
 		/// @brief Initialize with a position and direction. Direction is automatically normalized.
 		GAL_INLINE Camera(const glm::vec3& position, const glm::vec3& direction)
 			: position(position), rotation(glm::vec3(0.0f, 0.0f, -1.0f), direction) { cachedViewMatrix = calculateViewMatrix(); }
-
-		GAL_NODISCARD GAL_INLINE glm::mat4 getViewMatrix() const noexcept
-		{
-			if (dirty)
-			{
-				cachedViewMatrix = calculateViewMatrix();
-				dirty = false;
-			}
-
-			return cachedViewMatrix;
-		}
 		
 		/// @brief Move the camera in global space. 
 		GAL_INLINE void moveGlobal(const glm::vec3& delta) noexcept { position += delta; dirty = true; }
@@ -57,6 +46,26 @@ namespace gal
 		GAL_NODISCARD GAL_INLINE glm::vec3 getForward() const noexcept { return rotation.rotate(glm::vec3(0.0f, 0.0f, -1.0f)); }
 		GAL_NODISCARD GAL_INLINE glm::vec3 getRight() const noexcept { return rotation.rotate(glm::vec3(1.0f, 0.0f, 0.0f)); }
 		GAL_NODISCARD GAL_INLINE glm::vec3 getUp() const noexcept { return rotation.rotate(glm::vec3(0.0f, 1.0f, 0.0f)); }
+
+		GAL_INLINE void lookAt(const glm::vec3& target, const glm::vec3& up) noexcept
+		{
+			rotation = glm::quatLookAt(glm::normalize(target - position), up);
+			dirty = true;
+		}
+
+		GAL_INLINE void lookAt(const glm::vec3& target) { lookAt(target, getUp()); }
+
+		/// @brief Get the view matrix for this camera. Automatically cached for your performance convenience.
+		GAL_NODISCARD GAL_INLINE glm::mat4 getViewMatrix() const noexcept
+		{
+			if (dirty)
+			{
+				cachedViewMatrix = calculateViewMatrix();
+				dirty = false;
+			}
+
+			return cachedViewMatrix;
+		}
 
 	private:
 		glm::vec3 position;

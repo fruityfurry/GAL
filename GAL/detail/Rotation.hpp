@@ -14,7 +14,7 @@ namespace gal
 		/// @brief Initialize with a rotation quaternion. 
 		GAL_INLINE Rotation(const glm::quat& rotationQuaternion) { set(rotationQuaternion); }
 
-		/// @brief Initialize with euler angles. 
+		/// @brief Initialize with euler angles (pitch (x-axis), yaw (y-axis), roll (z-axis)). 
 		GAL_INLINE Rotation(const glm::vec3& eulerAngles) { set(eulerAngles); }
 
 		/// @brief Initialize with an angle and an axis. 
@@ -41,6 +41,7 @@ namespace gal
 			const glm::vec3 normTo = glm::normalize(to);
 
 			const float dotProduct = glm::dot(normFrom, normTo);
+
 			const float angle = glm::acos(dotProduct);
 			const glm::vec3 axis = glm::normalize(glm::cross(normFrom, normTo));
 
@@ -69,9 +70,6 @@ namespace gal
 
 		/// @brief Spherically interpolate between another rotation. 
 		GAL_NODISCARD GAL_INLINE Rotation slerp(const Rotation& other, float t) const noexcept { return Rotation(glm::slerp(quat, other.quat, t)); }
-
-		/// @brief Get a reference to the internal quaternion used by this object. You may alter this quaternion freely.
-		GAL_NODISCARD GAL_INLINE glm::quat& quatRef() noexcept { return quat; }
 
 	private:
 		glm::quat quat;

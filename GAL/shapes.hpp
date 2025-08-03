@@ -133,16 +133,64 @@ namespace gal
 						const float texU = (u + 1.0f) / 2.0f;
 						const float texV = (v + 1.0f) / 2.0f;
 
-						for (int n = 0; n < 6; ++n)
-						{
-							texCoords.push_back({ texU,           texV });
-							texCoords.push_back({ texU + texStep, texV });
-							texCoords.push_back({ texU,           texV + texStep });
+						const float invTexU = 1.0f - texU;
+						const float invTexV = 1.0f - texV;
 
-							texCoords.push_back({ texU + texStep, texV });
-							texCoords.push_back({ texU + texStep, texV + texStep });
-							texCoords.push_back({ texU,           texV + texStep });
-						}
+						// I found these all out through complete trial and error and I refuse to spend any longer trying to make this code look nice.
+
+						// X faces.
+
+						texCoords.push_back({ texV,           texU });
+						texCoords.push_back({ texV,           texU + texStep });
+						texCoords.push_back({ texV + texStep, texU });
+
+						texCoords.push_back({ texV,           texU + texStep });
+						texCoords.push_back({ texV + texStep, texU + texStep });
+						texCoords.push_back({ texV + texStep, texU });
+
+						texCoords.push_back({ invTexV,           texU });
+						texCoords.push_back({ invTexV,           texU + texStep });
+						texCoords.push_back({ invTexV - texStep, texU });
+
+						texCoords.push_back({ invTexV,           texU + texStep });
+						texCoords.push_back({ invTexV - texStep, texU + texStep });
+						texCoords.push_back({ invTexV - texStep, texU });
+
+						// Y faces.
+
+						texCoords.push_back({ texU,           texV });
+						texCoords.push_back({ texU + texStep, texV });
+						texCoords.push_back({ texU,           texV + texStep });
+
+						texCoords.push_back({ texU + texStep, texV });
+						texCoords.push_back({ texU + texStep, texV + texStep });
+						texCoords.push_back({ texU,           texV + texStep });
+
+						texCoords.push_back({ texU,           invTexV });
+						texCoords.push_back({ texU + texStep, invTexV });
+						texCoords.push_back({ texU,           invTexV - texStep });
+
+						texCoords.push_back({ texU + texStep, invTexV });
+						texCoords.push_back({ texU + texStep, invTexV - texStep });
+						texCoords.push_back({ texU,           invTexV - texStep });
+
+						// Z faces.
+
+						texCoords.push_back({ invTexU,           texV });
+						texCoords.push_back({ invTexU - texStep, texV });
+						texCoords.push_back({ invTexU,           texV + texStep });
+
+						texCoords.push_back({ invTexU - texStep, texV });
+						texCoords.push_back({ invTexU - texStep, texV + texStep });
+						texCoords.push_back({ invTexU,           texV + texStep });
+
+						texCoords.push_back({ texU,           texV });
+						texCoords.push_back({ texU + texStep, texV });
+						texCoords.push_back({ texU,           texV + texStep });
+
+						texCoords.push_back({ texU + texStep, texV });
+						texCoords.push_back({ texU + texStep, texV + texStep });
+						texCoords.push_back({ texU,           texV + texStep });
 					}
 
 					// X faces.

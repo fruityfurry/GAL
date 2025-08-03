@@ -1,4 +1,3 @@
-#define GAL_WARNINGS
 #define STB_IMAGE_IMPLEMENTATION
 #include <gal.hpp>
 #include <shapes.hpp>
@@ -38,6 +37,9 @@ static void processInput(gal::Window& window)
 	// ============ Keydowns ============
 
 	const float dt = gal::getDeltaTime<float>();
+
+	if (isKeyDown(GLFW_KEY_L))
+		camera.lookAt({ 0.0f, 0.0f, -1.0f }, { 0.0f, 1.0f, 0.0f });
 
 	if (isKeyDown(GLFW_KEY_W))
 		camera.moveLocal(glm::vec3(0.0f, 0.0f, cameraMoveSpeed * dt));
@@ -109,10 +111,10 @@ int main()
 	
 	gal::MeshInstance instances[] =
 	{
-		{ vao, gal::Transform({ 0.0f, 1.8f, -1.0f }, gal::Rotation(glm::vec3(1.0f, 0.3f, 0.0f)), { 0.5f, 0.3f, 0.5f })},
-		{ vao, gal::Transform({ -1.0f, 1.8f, -2.0f }, gal::Rotation(glm::vec3(1.0f, 0.3f, 2.0f)), { 0.3f, 0.5f, 0.3f }) },
+		{ vao, gal::Transform({ 0.0f, 1.8f, -1.0f }, gal::Rotation(glm::vec3(1.0f, 0.3f, 0.0f)), { 0.5f, 0.5f, 0.5f })},
+		{ vao, gal::Transform({ -1.0f, 1.8f, -2.0f }, gal::Rotation(glm::vec3(1.0f, 0.3f, 2.0f)), { 0.3f, 0.3f, 0.3f }) },
 		{ vao, gal::Transform({ 1.0f, 1.0f, -4.0f }, gal::Rotation(glm::vec3(0.2f, 1.2f, 0.4f)), { 1.2f, 1.2f, 1.2f }) },
-		{ vao, gal::Transform({ 0.0f, 0.0f, -1.0f }) }
+		{ vao, gal::Transform({ 0.0f, 0.0f, -1.0f })) }
 	};
 
 	// ============ Texture ============
@@ -139,8 +141,6 @@ int main()
 	// ============ Uniforms ============
 
 	shader.setUniform("texture1", 0);
-	shader.setUniform("hue", glm::vec4(0.4f, 0.7f, 0.7f, 1.0f));
-	shader.setUniform("hueStrength", 0.2f);
 
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
@@ -159,7 +159,10 @@ int main()
 		shader.setUniform("view", camera.getViewMatrix());
 
 		for (auto& instance : instances)
+		{
+			instance.transform.applyRotationLocal({ { 0.0f, 1.0f, 0.0f }, 0.6f * gal::getDeltaTime<float>() });
 			instance.drawNB(shader, "model");
+		}
 
 		vao.drawNB();
 
