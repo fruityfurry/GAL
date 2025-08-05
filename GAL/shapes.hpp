@@ -126,8 +126,6 @@ namespace gal
 			for (float u = -1.0f; u < 1.0f; u += step)
 				for (float v = -1.0f; v < 1.0f; v += step)
 				{
-					// Vertices are added in BL, BR, TL - BR, TR, TL order.
-
 					if (generateTexCoords)
 					{
 						const float texU = (u + 1.0f) / 2.0f;
@@ -140,13 +138,13 @@ namespace gal
 
 						// X faces.
 
+						texCoords.push_back({ texV + texStep, texU });
+						texCoords.push_back({ texV,           texU + texStep });
 						texCoords.push_back({ texV,           texU });
-						texCoords.push_back({ texV,           texU + texStep });
-						texCoords.push_back({ texV + texStep, texU });
 
-						texCoords.push_back({ texV,           texU + texStep });
-						texCoords.push_back({ texV + texStep, texU + texStep });
 						texCoords.push_back({ texV + texStep, texU });
+						texCoords.push_back({ texV + texStep, texU + texStep });
+						texCoords.push_back({ texV,           texU + texStep });
 
 						texCoords.push_back({ invTexV,           texU });
 						texCoords.push_back({ invTexV,           texU + texStep });
@@ -166,23 +164,23 @@ namespace gal
 						texCoords.push_back({ texU + texStep, texV + texStep });
 						texCoords.push_back({ texU,           texV + texStep });
 
+						texCoords.push_back({ texU,           invTexV - texStep });
+						texCoords.push_back({ texU + texStep, invTexV });
 						texCoords.push_back({ texU,           invTexV });
-						texCoords.push_back({ texU + texStep, invTexV });
-						texCoords.push_back({ texU,           invTexV - texStep });
 
-						texCoords.push_back({ texU + texStep, invTexV });
-						texCoords.push_back({ texU + texStep, invTexV - texStep });
 						texCoords.push_back({ texU,           invTexV - texStep });
+						texCoords.push_back({ texU + texStep, invTexV - texStep });
+						texCoords.push_back({ texU + texStep, invTexV });
 
 						// Z faces.
 
+						texCoords.push_back({ invTexU,           texV + texStep });
+						texCoords.push_back({ invTexU - texStep, texV });
 						texCoords.push_back({ invTexU,           texV });
-						texCoords.push_back({ invTexU - texStep, texV });
-						texCoords.push_back({ invTexU,           texV + texStep });
 
-						texCoords.push_back({ invTexU - texStep, texV });
-						texCoords.push_back({ invTexU - texStep, texV + texStep });
 						texCoords.push_back({ invTexU,           texV + texStep });
+						texCoords.push_back({ invTexU - texStep, texV + texStep });
+						texCoords.push_back({ invTexU - texStep, texV });
 
 						texCoords.push_back({ texU,           texV });
 						texCoords.push_back({ texU + texStep, texV });
@@ -194,13 +192,13 @@ namespace gal
 					}
 
 					// X faces.
+					positions.push_back({ -1.0f, u,        v + step });
+					positions.push_back({ -1.0f, u + step, v });
 					positions.push_back({ -1.0f, u,        v });
-					positions.push_back({ -1.0f, u + step, v });
-					positions.push_back({ -1.0f, u,        v + step });
 
-					positions.push_back({ -1.0f, u + step, v });
-					positions.push_back({ -1.0f, u + step, v + step });
 					positions.push_back({ -1.0f, u,        v + step });
+					positions.push_back({ -1.0f, u + step, v + step });
+					positions.push_back({ -1.0f, u + step, v });
 
 					positions.push_back({ 1.0f, u,        v });
 					positions.push_back({ 1.0f, u + step, v });
@@ -219,22 +217,22 @@ namespace gal
 					positions.push_back({ u + step, -1.0f, v + step });
 					positions.push_back({ u,        -1.0f, v + step });
 
+					positions.push_back({ u,        1.0f, v + step });
+					positions.push_back({ u + step, 1.0f, v });
 					positions.push_back({ u,        1.0f, v });
-					positions.push_back({ u + step, 1.0f, v });
-					positions.push_back({ u,        1.0f, v + step });
 
-					positions.push_back({ u + step, 1.0f, v });
-					positions.push_back({ u + step, 1.0f, v + step });
 					positions.push_back({ u,        1.0f, v + step });
+					positions.push_back({ u + step, 1.0f, v + step });
+					positions.push_back({ u + step, 1.0f, v });
 
 					// Z faces.
+					positions.push_back({ u,        v + step, -1.0f });
+					positions.push_back({ u + step, v,        -1.0f });
 					positions.push_back({ u,        v,        -1.0f });
-					positions.push_back({ u + step, v,        -1.0f });
-					positions.push_back({ u,        v + step, -1.0f });
 
-					positions.push_back({ u + step, v,        -1.0f });
-					positions.push_back({ u + step, v + step, -1.0f });
 					positions.push_back({ u,        v + step, -1.0f });
+					positions.push_back({ u + step, v + step, -1.0f });
+					positions.push_back({ u + step, v,        -1.0f });
 
 					positions.push_back({ u,        v,        1.0f });
 					positions.push_back({ u + step, v,        1.0f });

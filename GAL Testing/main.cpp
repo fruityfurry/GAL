@@ -87,16 +87,18 @@ int main()
 	gal::VertexArray vao = gal::VertexArray();
 
 	// This funny looking syntax just unpacks the vertex data vector and index vector pair this functions gives us into two variables.
-	auto [vertexData, indices] = gal::shapes::generateCubeVertices(6, false, true);  // Generate cube subdivided 6 times, with tex coords.
+	auto [vertexData, indices] = gal::shapes::generateCubeVertices(6, true, true);  // Generate cube subdivided 6 times,
+																					// with normals and tex coords.
 	
 	gal::Buffer vbo = gal::Buffer(gal::BufferType::Array);
 	vbo.allocateAndWrite(vertexData, gal::BufferUsageHint::StaticDraw);
 
 	// You have to rely on knowing what attributes you picked to be generated and how they're ordered to do this.
 	// See the generateCubeVertices docstring for that information.
-	vao.bindVertexBuffer(vbo, 0, 0, sizeof(gal::VertexP3T2));
+	vao.bindVertexBuffer(vbo, 0, 0, sizeof(gal::VertexP3N3T2));
 	vao.newVertexAttribute(0, 0, 3, GL_FLOAT, GL_FALSE, 0);
-	vao.newVertexAttribute(1, 0, 2, GL_FLOAT, GL_FALSE, offsetof(gal::VertexP3T2, texCoords));
+	vao.newVertexAttribute(1, 0, 3, GL_FLOAT, GL_FALSE, offsetof(gal::VertexP3N3T2, normal));
+	vao.newVertexAttribute(2, 0, 2, GL_FLOAT, GL_FALSE, offsetof(gal::VertexP3N3T2, texCoords));
 
 	gal::Buffer ebo = gal::Buffer(gal::BufferType::ElementArray);
 	ebo.allocateAndWrite(indices, gal::BufferUsageHint::StaticDraw);
@@ -111,10 +113,10 @@ int main()
 	
 	gal::MeshInstance instances[] =
 	{
-		{ vao, gal::Transform({ 0.0f, 1.8f, -1.0f }, gal::Rotation(glm::vec3(1.0f, 0.3f, 0.0f)), { 0.5f, 0.5f, 0.5f })},
+		{ vao, gal::Transform({ 0.0f, 2.2f, -1.0f }, gal::Rotation(glm::vec3(1.0f, 0.3f, 0.0f)), { 0.5f, 0.5f, 0.5f })},
 		{ vao, gal::Transform({ -1.0f, 1.8f, -2.0f }, gal::Rotation(glm::vec3(1.0f, 0.3f, 2.0f)), { 0.3f, 0.3f, 0.3f }) },
-		{ vao, gal::Transform({ 1.0f, 1.0f, -4.0f }, gal::Rotation(glm::vec3(0.2f, 1.2f, 0.4f)), { 1.2f, 1.2f, 1.2f }) },
-		{ vao, gal::Transform({ 0.0f, 0.0f, -1.0f })) }
+		{ vao, gal::Transform({ 1.0f, 1.0f, -4.5f }, gal::Rotation(glm::vec3(0.2f, 1.2f, 0.4f)), { 1.2f, 1.2f, 1.2f }) },
+		{ vao, gal::Transform({ 0.0f, 0.0f, -1.0f }) }
 	};
 
 	// ============ Texture ============
@@ -146,6 +148,11 @@ int main()
 	projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 
 	shader.setUniform("projection", projection);
+
+	shader.setUniform("ambientLight", 0.1f);
+
+	shader.setUniform("lightPos", glm::vec3(-4.0f, 4.0f, 0.0f));
+	shader.setUniform("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 
 	while (!window.shouldClose())
 	{
